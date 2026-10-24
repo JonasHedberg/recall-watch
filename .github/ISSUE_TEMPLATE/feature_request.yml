@@ -1,0 +1,14 @@
+name: Feature request
+description: Suggest improvements or official data sources
+labels: [enhancement]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: Proposed functionality
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Official source URL, if applicable
