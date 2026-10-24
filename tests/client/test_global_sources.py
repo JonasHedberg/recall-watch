@@ -25,8 +25,8 @@ CPSC_SAMPLE = [{
 
 def test_source_registry_is_fixed_and_jurisdiction_aware():
     assert DEFAULT_SOURCE == "se_food"
-    assert set(SOURCES) == {"se_food", "ca_food", "ca_consumer", "uk_consumer", "us_consumer"}
-    assert {source.country for source in SOURCES.values()} == {"SE", "CA", "GB", "US"}
+    assert set(SOURCES) == {"se_food", "ca_food", "ca_consumer", "uk_consumer", "us_consumer", "eu_safety_gate"}
+    assert {source.country for source in SOURCES.values()} == {"SE", "CA", "GB", "US", "EU"}
     assert all(source.url.startswith("https://") for source in SOURCES.values())
 
 
