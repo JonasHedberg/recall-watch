@@ -1,0 +1,11 @@
+name: Legacy CI entrypoint
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  documentation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo 'Validation is provided by validate.yml'
