@@ -3,6 +3,7 @@
 from .client import RecallClient
 from .sources import RecallSource, SOURCES, DEFAULT_SOURCE
 from .cpsc import parse_cpsc_recalls
+from .safety_gate import parse_safety_gate_index, parse_safety_gate_report
 from .exceptions import RecallConnectionError, RecallError, RecallHTTPError, RecallParseError
 from .models import RecallNotice
 from .enrichment import RecallDetails, extract_recall_details
@@ -11,7 +12,7 @@ from .parsing import parse_recall_feed
 from .serialization import serialize_notice, page_notices, MAX_PREVIEW
 
 __all__ = [
-    "RecallClient",
+    "RecallClient", "parse_safety_gate_index", "parse_safety_gate_report",
     "RecallSource", "SOURCES", "DEFAULT_SOURCE", "parse_cpsc_recalls",
     "RecallConnectionError",
     "RecallError",
