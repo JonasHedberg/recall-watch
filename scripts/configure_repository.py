@@ -34,6 +34,8 @@ def configure(owner: str, repository: str = "recall-watch", root: Path = ROOT) -
     readme_file = root / "README.md"
     readme = readme_file.read_text(encoding="utf-8")
     readme = readme.replace("OWNER/recall-watch", f"{owner}/{repository}")
+    readme = re.sub(r"(?<=github\.com/)[A-Za-z0-9-]+/recall-watch", f"{owner}/{repository}", readme)
+    readme = re.sub(r"(?<=`)[A-Za-z0-9-]+/recall-watch(?=`)", f"{owner}/{repository}", readme)
     readme_file.write_text(readme, encoding="utf-8")
     print(f"Configured owner for https://github.com/{owner}/{repository}")
     print("Review repository URLs and check that this account is real before publishing.")

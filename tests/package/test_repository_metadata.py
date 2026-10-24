@@ -23,10 +23,10 @@ def repo_copy(tmp_path: Path) -> Path:
     return tmp_path
 
 
-def test_repository_structure_and_unconfigured_owner(tmp_path: Path) -> None:
+def test_repository_structure_and_configured_owner(tmp_path: Path) -> None:
     root = repo_copy(tmp_path)
     assert validate(root=root) == []
-    assert any("owner" in issue.lower() or "codeowners" in issue.lower() for issue in validate(True, root=root))
+    assert validate(require_owner=True, root=root) == []
 
 
 def test_configure_owner_and_validate_release_metadata(tmp_path: Path) -> None:

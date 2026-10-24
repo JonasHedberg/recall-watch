@@ -4,14 +4,16 @@
   "categories": [
     "weather_alerts.public_warnings"
   ],
-  "codeowners": [],
+  "codeowners": [
+    "@JonasHedberg"
+  ],
   "config_flow": true,
-  "documentation": "https://github.com/REPLACE_WITH_OWNER/recall-watch#readme",
+  "documentation": "https://github.com/JonasHedberg/recall-watch#readme",
   "integration_type": "service",
   "iot_class": "cloud_polling",
-  "issue_tracker": "https://github.com/REPLACE_WITH_OWNER/recall-watch/issues",
+  "issue_tracker": "https://github.com/JonasHedberg/recall-watch/issues",
   "requirements": [
     "defusedxml==0.7.1"
   ],
-  "version": "0.3.0b1"
+  "version": "0.4.0b1"
 }

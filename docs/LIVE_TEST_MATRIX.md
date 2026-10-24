@@ -2,8 +2,9 @@
 
 This is a **manual checklist**, not evidence of execution. Log date, HA version, Python version, publisher response status and redacted test notes when completed. A human reviewer must sign off on every relevant item.
 
-| Data source | Endpoint accessible | Correct RSS/Atom/JSON | Correct language/date/URL | Size < 2 MiB and ≤ 250 records | Outage/recovery | Approved |
+| Data source | Endpoint accessible | Correct RSS/Atom/JSON/XML | Correct language/date/URL | Size < 2 MiB and ≤ 250 records | Outage/recovery | Approved |
 |---|---|---|---|---|---|---|
+| EU Safety Gate XML (index + two reports) | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ |
 | Swedish Food Agency RSS | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ |
 | Canada food RSS | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ |
 | Canada consumer RSS | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ |

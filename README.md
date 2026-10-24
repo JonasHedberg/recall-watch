@@ -1,6 +1,6 @@
 # Recall Watch — International product recall monitoring for Home Assistant
 
-> **0.3.0b1 — UNRELEASED BETA CANDIDATE. Not validated in a real Home Assistant runtime or against current production feed payloads.** This is a third-party Home Assistant integration, not an official Home Assistant Core integration, an official government service, or a substitute for checking authoritative safety notices. Do **not** publish a release until [every release gate](docs/RELEASE_CHECKLIST.md) is cleared.
+> **0.4.0b1 — UNRELEASED BETA CANDIDATE. Not validated in a real Home Assistant runtime or against current production feed payloads.** This is a third-party Home Assistant integration, not an official Home Assistant Core integration, an official government service, or a substitute for checking authoritative safety notices. Do **not** publish a release until [every release gate](docs/RELEASE_CHECKLIST.md) is cleared.
 
 Recall Watch surfaces official recall notices as Home Assistant sensors and a response-only action. Choose one or more supported country-specific sources. Each configured source is independent, with its own keyword filter, coordinator and entity set. The integration never uploads keyword lists to a Recall Watch server; queries use only fixed government endpoints.
 
@@ -10,6 +10,7 @@ Recall Watch surfaces official recall notices as Home Assistant sensors and a re
 
 | Selection | Country | Category | Publisher | Transport | Scope |
 |---|---|---|---|---|---|
+| `eu_safety_gate` | European Union / EEA | Dangerous non-food product alerts | European Commission / Safety Gate | Official weekly XML index + report XML | Most recent two weekly reports; includes alerts other than consumer recalls |
 | `se_food` | Sweden | Food | Swedish Food Agency (Livsmedelsverket) | RSS | Published Swedish food recall notices |
 | `ca_food` | Canada | Food | Government of Canada / CFIA | RSS | Canadian food recall alerts |
 | `ca_consumer` | Canada | Consumer products | Government of Canada | RSS | Canadian consumer-product alerts |
@@ -18,7 +19,7 @@ Recall Watch surfaces official recall notices as Home Assistant sensors and a re
 
 Official-source references and exact fixed URLs are documented in [DATA_SOURCES.md](docs/DATA_SOURCES.md). The country identifies **where the publishing authority operates**, not every market in which a recalled product was sold. Cross-border products, imports and multinational brands require checking more than one jurisdiction.
 
-**Not yet supported:** the EU Safety Gate automated feed, RASFF, US FDA food enforcement, worldwide/country-agnostic coverage, barcode inventory checking and legal classification of affected products. EU Safety Gate needs a validated long-lived machine interface before inclusion. Never interpret “international” as “all recalls worldwide”.
+**Not yet supported:** RASFF, US FDA food enforcement, worldwide/country-agnostic coverage, barcode inventory checking and legal classification of affected products. Safety Gate uses the published weekly XML reports; its live feed schema has not yet passed acceptance tests in a Home Assistant installation. These are **dangerous-product alerts**, not necessarily product recalls. The report-based feed is not an exhaustive, real-time view of all alerts. Never interpret “international” as “all recalls worldwide”.
 
 ## Features
 
@@ -33,10 +34,10 @@ Official-source references and exact fixed URLs are documented in [DATA_SOURCES.
 
 ## Installation
 
-This project has **not** been published to a real GitHub repository by the supplied archive. After the maintainer creates a public repository and approves the beta:
+The project source is available at [JonasHedberg/recall-watch](https://github.com/JonasHedberg/recall-watch). This is an **unreleased beta candidate**; before installing as a custom repository, review the release limitations:
 
 1. Make a backup of your Home Assistant configuration.
-2. On Home Assistant 2026.10 or earlier, in HACS add `OWNER/recall-watch` as a **Custom repository → Integration**. On Home Assistant 2026.11+, use the built-in **Marketplace** with its custom repository option.
+2. On Home Assistant 2026.10 or earlier, in HACS add `JonasHedberg/recall-watch` as a **Custom repository → Integration**, once a tested HACS release is available. On Home Assistant 2026.11+, use the built-in **Marketplace** with its custom repository option.
 3. Download/install the integration and restart Home Assistant.
 4. Select **Settings → Devices & services → Add integration → Recall Watch**. Select **one** official source and optionally supply up to 20 comma-separated search phrases (maximum 64 characters each).
 5. Repeat step 4 to monitor additional countries or categories. There can be only one configuration entry per source, but multiple sources can be configured.
@@ -92,7 +93,7 @@ All code, repository documents and canonical keys are English. UI messages are s
 - Recall Watch makes outbound HTTPS requests to the fixed publisher websites; publishers may see the requesting host's IP address. No cloud account or API key is required in this release.
 - RSS feeds can omit records or remove older entries, authorities may update notices after publication, and the CPSC source intentionally limits requests to the most recently updated 90 days. Polling every six hours is **not** a real-time alert guarantee.
 - Brand, batch and risk information may be missing, misleading or falsely identified in unstructured text; a product in one country does not imply availability in another.
-- The UK, Canadian, Swedish and US source adapters have **offline fixtures only** here; live network and runtime acceptance remain blocked in [QA_REPORT.md](docs/QA_REPORT.md).
+- The EU, UK, Canadian, Swedish and US source adapters have **offline fixtures only** here; live network and runtime acceptance remain blocked in [QA_REPORT.md](docs/QA_REPORT.md).
 - Recall Watch is not endorsed by Home Assistant, any public agency or government.
 
 Read [DATA_EXTRACTION.md](docs/DATA_EXTRACTION.md), [SECURITY_AND_PRIVACY.md](docs/SECURITY_AND_PRIVACY.md) and [DATA_SOURCES.md](docs/DATA_SOURCES.md) before relying on the integration.

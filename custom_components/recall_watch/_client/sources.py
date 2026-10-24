@@ -22,6 +22,10 @@ class RecallSource:
 
 
 SOURCES: dict[str, RecallSource] = {
+    "eu_safety_gate": RecallSource(
+        "eu_safety_gate", "European Union: Safety Gate product alerts", "EU", "consumer", "safety_gate_xml",
+        "https://ec.europa.eu/safety-gate-alerts/api/download/weeklyReport/list/xml/en",
+    ),
     "se_food": RecallSource(
         "se_food", "Swedish Food Agency", "SE", "food", "rss",
         "https://www.livsmedelsverket.se/rss/rss-aterkallanden",

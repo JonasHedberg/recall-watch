@@ -15,7 +15,7 @@ There are **three separate milestones**: a public source repository, a pre-relea
 
 ## B. Tag and publish a release
 
-- Use a compatible version string in `custom_components/recall_watch/manifest.json` and in the git tag (example: `0.3.0b1`).
+- Use a compatible version string in `custom_components/recall_watch/manifest.json` and in the git tag (example: `0.4.0b1`).
 - Update `CHANGELOG.md` and prepare release notes describing changes, incompatibilities, security implications and limitations.
 - Commit and merge the reviewed code, confirm the passing CI run, then create a matching annotated tag and GitHub **Release** (not tag alone).
 - Mark beta versions as **pre-release** on GitHub. HACS/Marketplace may require the user to opt in to pre-releases. A branch install is an alternative for testers.
@@ -25,8 +25,8 @@ There are **three separate milestones**: a public source repository, a pre-relea
 Example commands **after review and acceptance**:
 
 ```sh
-git tag -a 0.3.0b1 -m "Recall Watch 0.3.0b1"
-git push origin 0.3.0b1
+git tag -a 0.4.0b1 -m "Recall Watch 0.4.0b1"
+git push origin 0.4.0b1
 ```
 
 Then create the corresponding GitHub Release and mark it as a pre-release.

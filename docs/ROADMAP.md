@@ -1,6 +1,6 @@
 # Roadmap
 
-## Current candidate: 0.3.0b1 — International foundations
+## Current candidate: 0.4.0b1 — International foundations
 
 Five selected official feeds for four national jurisdictions (Sweden, Canada, United Kingdom and United States). Separate source setup, per-source keyword filtering and six sensors, stable response-only action, English and Swedish messages, and backward migration for Swedish v0.2 entries. **Not production or release verified.**
 

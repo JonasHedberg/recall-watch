@@ -1,4 +1,4 @@
-# Quality assurance report — International beta 0.3.0b1
+# Quality assurance report — International beta 0.4.0b1
 
 **Assessment date:** 24 October 2026
 **Classification:** Source package candidate — **NOT RELEASE-APPROVED**.
@@ -7,19 +7,20 @@
 
 | Check | Result | Scope |
 |---|---|---|
-| Offline automated tests | **72 passed** | RSS/Atom, CPSC JSON, normalized model, text enrichment, network error handling, country/source isolation, service stub contracts, migration, package metadata |
-| Client statement coverage | **369 / 369 = 100%** | `custom_components/recall_watch/_client/` **only**, not Home Assistant runtime integration |
+| Offline automated tests | **77 passed** | RSS/Atom, CPSC JSON, normalized model, text enrichment, network error handling, country/source isolation, service stub contracts, migration, package metadata |
+| Client statement coverage | **475 / 486 = 97.7% (reported as 98%)** | `custom_components/recall_watch/_client/` **only**, includes Safety Gate; not Home Assistant runtime integration |
 | Syntax compilation | Passed | Custom component Python code |
 | Local repository validation | Passed | JSON, YAML, translation key parity, Markdown links and directory layout |
 | HACS multi-country metadata | Verified offline | No `country` restriction in `hacs.json` |
-| Release guard | **Expected failure** | Real GitHub owner, public URL and maintainer have not been provided |
+| Release guard | **Expected failure** | Live-provider, Home Assistant runtime and independent release gates remain unverified |
 
-Tests were run using Python 3.13.5. Mocked Home Assistant modules are **not** a substitute for genuine Core runtime tests. No project release was published and no remote repository was modified.
+Tests were run using Python 3.13.5. Mocked Home Assistant modules are **not** a substitute for genuine Core runtime tests. No GitHub release was published. GitHub source upload does not imply runtime validation.
 
 ## Not tested or verified
 
 | Mandatory step | Status |
 |---|---|
+| Live EU Safety Gate index and report XML | **Blocked / not verified** |
 | Live Swedish Food Agency RSS | **Blocked / not verified** |
 | Live Canadian food/consumer RSS | **Blocked / not verified** |
 | Live GOV.UK OPSS Atom feed | **Blocked / not verified** |
@@ -30,7 +31,8 @@ Tests were run using Python 3.13.5. Mocked Home Assistant modules are **not** a 
 | GitHub Actions HACS Action and hassfest | **Not run** |
 | HACS/Marketplace manual install, upgrade, restore and uninstall | **Not run** |
 | Human-labeled extraction accuracy, completeness and false positives | **Not performed** |
-| Real GitHub owner, codeowners and release URL | **Not configured** |
+| Real GitHub owner and codeowners | **Configured:** `JonasHedberg` |
+| Published release URL | **Not created** |
 | EU Safety Gate machine interface | **Not implemented** |
 
 ## Fail-closed behaviors
@@ -53,4 +55,4 @@ python scripts/validate_repository.py
 python scripts/pre_release_check.py
 ```
 
-The last command deliberately fails until real owner metadata is supplied. Even after owner configuration, it does not prove runtime or provider compatibility. Do not issue a stable or public beta release without reviewing [the release checklist](RELEASE_CHECKLIST.md) and [live-test matrix](LIVE_TEST_MATRIX.md).
+The last command may deliberately fail until live-provider and runtime release gates are documented. Repository ownership is configured, but this does not prove runtime or provider compatibility. Do not issue a stable or public beta release without reviewing [the release checklist](RELEASE_CHECKLIST.md) and [live-test matrix](LIVE_TEST_MATRIX.md).
