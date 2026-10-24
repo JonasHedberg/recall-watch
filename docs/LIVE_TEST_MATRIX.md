@@ -1,33 +1,22 @@
-# Pre-release live acceptance matrix
+# Live acceptance matrix — v0.4.0b1
 
-This is a **manual checklist**, not evidence of execution. Log date, HA version, Python version, publisher response status and redacted test notes when completed. A human reviewer must sign off on every relevant item.
+**Release blocked:** real-world data and Home Assistant runtime have not been checked.
 
-| Data source | Endpoint accessible | Correct RSS/Atom/JSON | Correct language/date/URL | Size < 2 MiB and ≤ 250 records | Outage/recovery | Approved |
-|---|---|---|---|---|---|---|
-| Swedish Food Agency RSS | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ |
-| Canada food RSS | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ |
-| Canada consumer RSS | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ |
-| GOV.UK OPSS Atom | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ |
-| US CPSC JSON (90 days) | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ |
+| Source | Endpoint | Real payload schema | Original URL validation | Errors/recovery | Approved |
+| --- | --- | --- | --- | --- | --- |
+| EU Safety Gate index + two weekly XML detail reports | Pending | Pending | Pending | Pending | No |
+| Swedish Food Agency RSS | Pending | Pending | Pending | Pending | No |
+| Canada food RSS | Pending | Pending | Pending | Pending | No |
+| Canada consumer RSS | Pending | Pending | Pending | Pending | No |
+| GOV.UK OPSS Atom | Pending | Pending | Pending | Pending | No |
+| US CPSC JSON | Pending | Pending | Pending | Pending | No |
 
-Also verify the original URLs point to appropriate authority records and that source attribution, data licensing and poll frequency comply with publisher terms.
+## Additional release gates
 
-## Home Assistant integration matrix
+1. Run integration in a real, supported Home Assistant instance and test setup, reload, unload and six sensors for each source.
+2. Verify the Safety Gate weekly index and detail XML schema from the official live feed with reproducible fixtures. Ensure CDATA, date, URL and risk fields are correct.
+3. Check attribution, publisher terms and per-source data limitations.
+4. Run repository CI, hassfest and HACS validation with passing results.
+5. Confirm that no notice count or missing metadata is presented as proof that a product is safe.
 
-- [ ] Install on supported HA Core with the version-recommended Python runtime and required dependencies.
-- [ ] Add one entry for each source and prevent duplicate entries for the same source.
-- [ ] Run a manual six-hour update, verify shared polling and API load.
-- [ ] Test five latest-field sensors and one count sensor for each configured source.
-- [ ] Check unrecognized brands, batch details and risk categories show unknown rather than invented values.
-- [ ] Confirm `get_notices` includes country, source and category; verify pagination and local keyword matching.
-- [ ] Ensure multi-source calls require a specified source ID; verify no cross-source data leakage.
-- [ ] Simulate HTTP 403/404/429/500, timeout, oversized feed, malformed XML, invalid JSON and empty responses.
-- [ ] Verify original-language notice content remains unmodified; switch UI language English ↔ Swedish.
-- [ ] Migrate a real v0.2 Swedish config entry; verify unique IDs and options after update and rollback.
-- [ ] Test source unload and reload while another source remains configured.
-- [ ] Run `hassfest` and HACS Action in the public repository with zero errors.
-- [ ] Validate HACS/Marketplace install, upgrade, reinstall and uninstall; ensure no unattended release is made.
-
-## Extraction accuracy acceptance
-
-Collect a representative, redacted and legally reusable fixture set per jurisdiction. For each real notice, label explicitly stated product, brand, hazard, lot/batch and best-before date against the primary source. Review false-positive and false-negative cases. Record the reviewed cases and acceptance criteria before enabling notification automations. A missing classification must not be interpreted as safe.
+Do not create a GitHub release until these conditions are met.
