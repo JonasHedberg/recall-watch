@@ -7,6 +7,7 @@ They exercise our service logic and sensor API shape without a supported HA runt
 from __future__ import annotations
 
 import importlib
+import logging
 import sys
 from pathlib import Path
 from types import ModuleType, SimpleNamespace
@@ -38,8 +39,12 @@ def mocked_ha(monkeypatch):
         def __class_getitem__(cls, item):
             return cls
 
-        def __init__(self, hass, *, name, update_interval):
+        def __init__(self, hass, logger, *, name, update_interval):
+            assert isinstance(logger, logging.Logger)
             self.hass = hass
+            self.logger = logger
+            self.name = name
+            self.update_interval = update_interval
 
     class UpdateFailed(Exception):
         pass
@@ -220,3 +225,15 @@ async def test_sensor_preview_bounded_and_missing_product_unknown(mocked_ha) -> 
     assert len(count.extra_state_attributes["notices"]) == 5
     product = sensor.RecallLatestFieldSensor(coordinator, entry, "product")
     assert product.native_value is None
+
+
+def test_coordinator_passes_required_ha_logger(mocked_ha) -> None:
+    """Verify compatibility with Home Assistant's required logger argument."""
+    module = importlib.import_module(f"{mocked_ha}.coordinator")
+    client = SimpleNamespace(source=SimpleNamespace(name="Swedish Food Agency"))
+    hass = object()
+    coordinator = module.RecallCoordinator(hass, client)
+    assert coordinator.hass is hass
+    assert coordinator.logger is module._LOGGER
+    assert coordinator.name == "Recall Watch: Swedish Food Agency"
+    assert coordinator.update_interval is not None
