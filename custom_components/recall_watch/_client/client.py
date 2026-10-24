@@ -8,6 +8,7 @@ from datetime import datetime, timedelta, timezone
 from aiohttp import ClientError, ClientResponseError, ClientSession
 
 from .cpsc import parse_cpsc_recalls
+from .safety_gate import (MAX_RECENT_REPORTS, parse_safety_gate_index, parse_safety_gate_report, safety_gate_detail_url)
 from .exceptions import RecallConnectionError, RecallHTTPError, RecallParseError
 from .models import RecallNotice
 from .parsing import MAX_FEED_BYTES, parse_recall_feed
@@ -46,7 +47,7 @@ class RecallClient:
                 headers={"Accept": accept},
                 **({"params": query} if query else {}),
                 timeout=20,
-                allow_redirects=True,
+                allow_redirects=self.source.feed_format != "safety_gate_xml",
                 max_redirects=3,
             ) as response:
                 response.raise_for_status()
@@ -57,6 +58,29 @@ class RecallClient:
             raise RecallConnectionError("Could not connect to recall source") from err
         if not content:
             raise RecallParseError("Empty recall response")
+        if self.source.feed_format == "safety_gate_xml":
+            reports = parse_safety_gate_index(content)[:MAX_RECENT_REPORTS]
+            notices: list[RecallNotice] = []
+            seen: set[str] = set()
+            # Restrict all additional requests to the fixed official endpoint.
+            for report_id, published in reports:
+                try:
+                    async with self._session.get(
+                        safety_gate_detail_url(report_id),
+                        headers={"Accept": "application/xml, text/xml"},
+                        timeout=20, allow_redirects=False,
+                    ) as detail:
+                        detail.raise_for_status()
+                        document = await detail.content.read(MAX_FEED_BYTES + 1)
+                except ClientResponseError as err:
+                    raise RecallHTTPError(f"Safety Gate returned HTTP {err.status}") from err
+                except (ClientError, asyncio.TimeoutError) as err:
+                    raise RecallConnectionError("Could not download Safety Gate report") from err
+                for item in parse_safety_gate_report(document, report_date=published):
+                    if item.identifier not in seen:
+                        seen.add(item.identifier)
+                        notices.append(item)
+            return tuple(notices)
         if self.source.feed_format == "cpsc_json":
             return parse_cpsc_recalls(content, source_id=self.source.source_id)
         return parse_recall_feed(content, source_id=self.source.source_id)
