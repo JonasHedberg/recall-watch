@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import logging
+
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
@@ -9,12 +11,19 @@ from ._client import RecallClient, RecallError, RecallNotice
 
 from .const import SCAN_INTERVAL
 
+_LOGGER = logging.getLogger(__name__)
+
 
 class RecallCoordinator(DataUpdateCoordinator[tuple[RecallNotice, ...]]):
     """Retrieve a single shared feed instead of polling per entity."""
 
     def __init__(self, hass: HomeAssistant, client: RecallClient) -> None:
-        super().__init__(hass, name=f"Recall Watch: {client.source.name}", update_interval=SCAN_INTERVAL)
+        super().__init__(
+            hass,
+            _LOGGER,
+            name=f"Recall Watch: {client.source.name}",
+            update_interval=SCAN_INTERVAL,
+        )
         self.source = client.source
         self._client = client
 
