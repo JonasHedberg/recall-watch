@@ -97,6 +97,7 @@ def mocked_ha(monkeypatch):
     register_module("homeassistant.core", HomeAssistant=type("HomeAssistant", (), {}),
                     ServiceCall=type("ServiceCall", (), {}), SupportsResponse=SupportsResponse)
     register_module("homeassistant.helpers")
+    register_module("homeassistant.helpers.config_validation", config_entry_only_config_schema=lambda domain: {domain: None})
     register_module("homeassistant.helpers.aiohttp_client", async_get_clientsession=lambda hass: object())
     register_module("homeassistant.helpers.entity_platform", AddConfigEntryEntitiesCallback=object)
     register_module("homeassistant.helpers.update_coordinator",

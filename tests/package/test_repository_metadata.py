@@ -26,7 +26,7 @@ def repo_copy(tmp_path: Path) -> Path:
 def test_repository_structure_and_configured_owner(tmp_path: Path) -> None:
     root = repo_copy(tmp_path)
     assert validate(root=root) == []
-    assert validate(require_owner=True, root=root) == []
+    assert validate(True, root=root) == []
 
 
 def test_configure_owner_and_validate_release_metadata(tmp_path: Path) -> None:
@@ -36,7 +36,7 @@ def test_configure_owner_and_validate_release_metadata(tmp_path: Path) -> None:
     assert manifest["codeowners"] == ["@Example-Owner"]
     assert manifest["issue_tracker"] == "https://github.com/Example-Owner/recall-watch/issues"
     assert "* @Example-Owner" in (root / ".github/CODEOWNERS").read_text()
-    assert "Example-Owner/recall-watch" in (root / "README.md").read_text()
+    assert "https://github.com/Example-Owner/recall-watch" in manifest["documentation"]
     assert validate(require_owner=True, root=root) == []
 
 
