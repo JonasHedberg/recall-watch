@@ -1,0 +1,81 @@
+{
+  "title": "Recall Watch",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Bevaka officiella produktåterkallelser",
+        "description": "Välj en officiell källa för ett land. Lägg till Recall Watch igen för fler källor. Sökordsträffar bekräftar inte att en viss produkt eller batch omfattas.",
+        "data": {
+          "keywords": "Sökord (valfritt, kommaseparerade)",
+          "source": "Källa för återkallelser"
+        },
+        "data_description": {
+          "keywords": "Sök i meddelandenas rubriker och sammanfattningar, exempelvis efter varumärke eller produkt. Träffarna kan vara ofullständiga eller felaktiga.",
+          "source": "Välj land och den officiella källan som ska bevakas."
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Det gick inte att ansluta till den valda källan",
+      "invalid_response": "Den valda källan returnerade ogiltiga eller okända data",
+      "invalid_keywords": "Ange högst 20 kommaseparerade sökord med maximalt 64 tecken vardera",
+      "unknown": "Ett oväntat fel inträffade",
+      "invalid_source": "Välj en källa som stöds"
+    },
+    "abort": {
+      "already_configured": "Denna källa är redan konfigurerad"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "matching_notices": {
+        "name": "Matchande återkallelser"
+      },
+      "latest_product": {
+        "name": "Senaste återkallelsens produkt"
+      },
+      "latest_brand": {
+        "name": "Senaste återkallelsens varumärke"
+      },
+      "latest_risk_type": {
+        "name": "Senaste återkallelsens risktyp",
+        "state": {
+          "allergen": "Allergen",
+          "chemical": "Kemisk",
+          "foreign_object": "Främmande föremål",
+          "microbiological": "Mikrobiologisk",
+          "labelling": "Märkning",
+          "packaging": "Förpackning",
+          "multiple": "Flera risktyper",
+          "fire": "Brandrisk",
+          "burn": "Brännskaderisk",
+          "electric_shock": "Elektrisk stöt",
+          "choking": "Kvävningsrisk"
+        }
+      },
+      "latest_batch_number": {
+        "name": "Senaste återkallelsens batchnummer"
+      },
+      "latest_best_before_date": {
+        "name": "Senaste återkallelsens bäst före-datum"
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Inställningar för Recall Watch",
+        "description": "Ändra sökord som bevakas. Lämna tomt för att visa alla meddelanden. En sökordsträff innebär inte att produkt eller parti har verifierats.",
+        "data": {
+          "keywords": "Sökord (valfritt, kommaseparerade)"
+        },
+        "data_description": {
+          "keywords": "Högst 20 sökord, högst 64 tecken vardera. Separera med kommatecken."
+        }
+      }
+    },
+    "error": {
+      "invalid_keywords": "Ange högst 20 kommaseparerade sökord på högst 64 tecken vardera"
+    }
+  }
+}

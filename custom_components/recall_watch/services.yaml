@@ -1,0 +1,46 @@
+get_notices:
+  name: Get recall notices
+  description: >-
+    Return paginated notices from the latest successfully fetched official feed.
+    Parsed product, brand, risk and batch fields are unverified text extractions;
+    null means unknown and empty lists do not establish that no affected batches exist.
+  fields:
+    source:
+      name: Official source
+      description: Source ID to query. Required when multiple sources are configured.
+      required: false
+      selector:
+        select:
+          options:
+            - {value: se_food, label: Swedish Food Agency}
+            - {value: ca_food, label: Canada - Food}
+            - {value: ca_consumer, label: Canada - Consumer Products}
+            - {value: uk_consumer, label: United Kingdom - Product Recalls}
+            - {value: us_consumer, label: United States - CPSC}
+    matching_only:
+      name: Match configured keywords
+      description: Apply the integration's configured keyword search, or get all current feed notices.
+      required: false
+      default: true
+      selector:
+        boolean:
+    offset:
+      name: Offset
+      description: Number of current notices to skip (0–250).
+      required: false
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 250
+          mode: box
+    limit:
+      name: Page size
+      description: Number of notices to return (1–100).
+      required: false
+      default: 20
+      selector:
+        number:
+          min: 1
+          max: 100
+          mode: box

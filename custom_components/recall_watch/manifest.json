@@ -1,0 +1,17 @@
+{
+  "domain": "recall_watch",
+  "name": "Recall Watch",
+  "categories": [
+    "weather_alerts.public_warnings"
+  ],
+  "codeowners": [],
+  "config_flow": true,
+  "documentation": "https://github.com/REPLACE_WITH_OWNER/recall-watch#readme",
+  "integration_type": "service",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/REPLACE_WITH_OWNER/recall-watch/issues",
+  "requirements": [
+    "defusedxml==0.7.1"
+  ],
+  "version": "0.3.0b1"
+}
