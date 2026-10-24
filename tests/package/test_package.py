@@ -15,7 +15,7 @@ def test_manifest_and_hacs_layout() -> None:
     assert manifest["version"] == "0.3.0b1"
     assert manifest["requirements"] == ["defusedxml==0.7.1"]
     assert (COMPONENT / "_client" / "client.py").exists()
-    assert not (COMPONENT / "strings.json").exists()
+    assert (COMPONENT / "strings.json").exists()
     assert hacs["name"] == "Recall Watch"
 
 
