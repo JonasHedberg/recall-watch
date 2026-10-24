@@ -1,0 +1,81 @@
+{
+  "title": "Recall Watch",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Monitor official product recalls",
+        "description": "Select one official country-specific source. Add Recall Watch again to monitor another source. Keyword matches are not verified product or batch matches.",
+        "data": {
+          "keywords": "Keywords (optional, comma-separated)",
+          "source": "Recall source"
+        },
+        "data_description": {
+          "keywords": "Match text in notice titles or summaries, for example a brand name or product. Results may be incomplete or inaccurate.",
+          "source": "Choose the jurisdiction and official recall feed to monitor."
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Cannot connect to the selected official recall source",
+      "invalid_response": "The selected recall source returned invalid or unsupported data",
+      "invalid_keywords": "Use up to 20 comma-separated keywords, each no longer than 64 characters",
+      "unknown": "An unexpected error occurred",
+      "invalid_source": "Select a supported official recall source"
+    },
+    "abort": {
+      "already_configured": "This recall source is already configured"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "matching_notices": {
+        "name": "Matching recall notices"
+      },
+      "latest_product": {
+        "name": "Latest recall product"
+      },
+      "latest_brand": {
+        "name": "Latest recall brand"
+      },
+      "latest_risk_type": {
+        "name": "Latest recall risk type",
+        "state": {
+          "allergen": "Allergen",
+          "chemical": "Chemical",
+          "foreign_object": "Foreign object",
+          "microbiological": "Microbiological",
+          "labelling": "Labelling",
+          "packaging": "Packaging",
+          "multiple": "Multiple risk types",
+          "fire": "Fire hazard",
+          "burn": "Burn hazard",
+          "electric_shock": "Electric shock",
+          "choking": "Choking hazard"
+        }
+      },
+      "latest_batch_number": {
+        "name": "Latest recall batch number"
+      },
+      "latest_best_before_date": {
+        "name": "Latest recall best-before date"
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Recall Watch options",
+        "description": "Edit your monitored keywords. Leave empty to include all notices. Keyword matches are not verified product or batch matches.",
+        "data": {
+          "keywords": "Keywords (optional, comma-separated)"
+        },
+        "data_description": {
+          "keywords": "Up to 20 keywords, each up to 64 characters. Commas separate search terms."
+        }
+      }
+    },
+    "error": {
+      "invalid_keywords": "Use up to 20 comma-separated keywords, each no longer than 64 characters"
+    }
+  }
+}
