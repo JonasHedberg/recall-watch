@@ -1,9 +1,6 @@
 {
   "domain": "recall_watch",
   "name": "Recall Watch",
-  "categories": [
-    "weather_alerts.public_warnings"
-  ],
   "codeowners": [
     "@JonasHedberg"
   ],
@@ -13,7 +10,7 @@
   "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/JonasHedberg/recall-watch/issues",
   "requirements": [
-    "defusedxml==0.7.1"
+    "defusedxml>=0.7.1"
   ],
   "version": "0.4.0b1"
 }
