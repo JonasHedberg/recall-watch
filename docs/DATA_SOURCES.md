@@ -1,34 +1,25 @@
-# Data sources and geographical coverage
+# Recall Watch data sources
 
-**Status:** candidate adapter implementation only. URLs and publishing formats were checked against published documentation on 24 October 2026, but actual payloads from the five sources have **not** been validated live inside Home Assistant. Source adapters are not certified or endorsed by the publishers.
+## EU Safety Gate — dangerous non-food products (beta)
 
-| ID | Country | Intended coverage | Exact official endpoint |
-|---|---|---|---|
-| `se_food` | Sweden (SE) | Food recalls by Livsmedelsverket | `https://www.livsmedelsverket.se/rss/rss-aterkallanden` |
-| `ca_food` | Canada (CA) | CFIA-related food recalls | `https://recalls-rappels.canada.ca/en/feed/cfia-alerts-recalls` |
-| `ca_consumer` | Canada (CA) | Consumer products | `https://recalls-rappels.canada.ca/en/feed/consumer-products-alerts-recalls` |
-| `uk_consumer` | United Kingdom (GB) | GOV.UK OPSS product recall filter | `https://www.gov.uk/product-safety-alerts-reports-recalls.atom?product_alert_type%5B%5D=product-recall` |
-| `us_consumer` | United States (US) | CPSC consumer product recalls, last 90 days of updates | `https://www.saferproducts.gov/restwebservices/Recall?format=json` with `LastPublishDateStart=YYYY-MM-DD` query parameter |
+ID: `eu_safety_gate`; jurisdiction: EU/EEA; category: consumer; official publisher: European Commission.
 
-### Source evidence
+Official XML index: https://ec.europa.eu/safety-gate-alerts/api/download/weeklyReport/list/xml/en
 
-- Sweden: [Swedish Food Agency RSS subscription page](https://www.livsmedelsverket.se/om-oss/press/rss/).
-- Canada: [Canadian recall RSS index](https://recalls-rappels.canada.ca/en/rss-feeds), listing separate food and consumer product feeds.
-- UK: [GOV.UK OPSS product safety recalls](https://www.gov.uk/product-safety-alerts-reports-recalls?product_alert_type%5B%5D=product-recall), including a filtered Atom subscription.
-- US: [CPSC API reference](https://www.cpsc.gov/Recalls/CPSC-Recalls-Application-Program-Interface-API-Information), supporting JSON recall records, and [CPSC date filtering](https://learn.microsoft.com/en-us/connectors/cpscrecallsretrievalip/).
+The adapter fetches the two newest weekly reports using validated numeric IDs and a fixed Commission endpoint; it does not follow arbitrary URLs. Each report's structured metadata is normalized to Home Assistant product, brand, hazard and batch fields where available. Missing data remains unknown.
 
-### Data semantics
+**Safety limitations:** Safety Gate publishes alerts about dangerous non-food products, which are **not necessarily product recalls**. Not every product was sold in every EU country. The two-week window is not an exhaustive history, and it is not real-time alerting.
 
-The country code represents the authority's jurisdiction. It is **not** a comprehensive affected-markets list; do not claim that a recall in one market applies to another without reading the original notice. Data completeness, update frequency and recall definitions are set by each source, not by Recall Watch.
+Attribution: Alerts from the Rapid Alert System for dangerous non-food products, published free of charge on the Safety Gate website (https://ec.europa.eu/safety-gate-alerts) © European Union, 2005 – 2026.
 
-CPSC explicitly supports a `LastPublishDateStart` date parameter. The client requests 90 days of last-published records to avoid downloading the API's full historic result set. There is no archive search, no stable database and no completeness claim. When the provider edits or removes a record, the current sensor values can change accordingly.
+The integration is independent of the European Commission. Live XML response schemas, Home Assistant compatibility, HACS/hassfest and source terms must be verified **before publishing a release**.
 
-### Why not include EU-wide Safety Gate or US FDA food reports?
+## Other sources
 
-The EU [Safety Gate alerts portal](https://ec.europa.eu/safety-gate-alerts/) provides consumer-facing alerts, but its supported, stable public machine-access interface has not been sufficiently validated for this version. An adapter will require reproducible official examples, license/rate-limit review, and fixtures. **EU coverage is not implemented.**
+- `se_food`: Livsmedelsverket RSS (Sweden).
+- `ca_food`: Government of Canada / CFIA food RSS.
+- `ca_consumer`: Government of Canada consumer products RSS.
+- `uk_consumer`: GOV.UK OPSS Atom.
+- `us_consumer`: CPSC JSON, 90-day last-published window.
 
-The [openFDA food enforcement API](https://open.fda.gov/apis/food/enforcement/) explicitly cautions against using its enforcement dataset to issue public alerts or track recall lifecycles. It is intentionally **not used** as a recall-alert source in this release.
-
-### Adding new countries
-
-New endpoints must come from verifiable public authority documentation. Require an explicit and fixed HTTPS URL, a clearly stated jurisdiction, bounded parser, limits and safe fallback, provider attribution, privacy/terms review, positive and negative fixtures, owner-reviewed QA and a translated selector label. Do not scrape a site or advertise a country until its source contract is confirmed and tests run.
+The authority's jurisdiction is not a statement of every affected sales market. No recall feed is exhaustive.
