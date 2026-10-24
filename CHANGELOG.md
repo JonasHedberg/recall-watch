@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.4.0b1] - Unreleased beta candidate
+
+- Add European Commission **Safety Gate** weekly XML source for dangerous **non-food** product alerts (EU/EEA), not exhaustive food recalls.
+- Select the two latest official weekly reports with bounded requests, XML safety guards and official-record URL checks.
+- Parse explicit product, brand, risk and batch information without inferring unknown metadata.
+- Add offline XML index/report regression tests and live acceptance requirements.
+- This code is **not production-approved**. No GitHub release or tag should be created until upstream feed and Home Assistant runtime testing is complete.
+
+# Changelog
+
 All notable user-visible changes are documented here. Version numbers in this repository describe **unreleased candidate code**, not published GitHub releases.
 
 ## 0.3.0b1 — Unreleased international beta candidate (2026-10-24)
