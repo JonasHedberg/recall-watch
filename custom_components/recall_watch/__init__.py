@@ -8,11 +8,14 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant, ServiceCall, SupportsResponse
 from homeassistant.exceptions import HomeAssistantError
+from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from ._client import DEFAULT_SOURCE, SOURCES, RecallClient, matching_notices, page_notices, parse_keywords
 from .const import CONF_KEYWORDS, CONF_SOURCE, DOMAIN
 from .coordinator import RecallCoordinator
+
+CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
 
 PLATFORMS: list[Platform] = [Platform.SENSOR]
 SERVICE_GET_NOTICES = "get_notices"
