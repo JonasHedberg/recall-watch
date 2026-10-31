@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import argparse
 import asyncio
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 import json
 from pathlib import Path
 import sys
@@ -27,6 +27,24 @@ async def check_source(session: aiohttp.ClientSession, source_id: str) -> dict:
             raise ValueError("No verifiable authority link in response")
     except Exception as exc:
         result["error"] = f"{type(exc).__name__}: {str(exc)[:180]}"
+        # Diagnostic requests use only the same fixed government endpoints and
+        # record metadata plus a bounded public-response prefix. No credentials.
+        from _client.sources import SOURCES as SOURCE_REGISTRY
+        source = SOURCE_REGISTRY[source_id]
+        params = {"LastPublishDateStart": (datetime.now(timezone.utc) - timedelta(days=90)).date().isoformat()} if source.feed_format == "cpsc_json" else None
+        try:
+            async with session.get(source.url, params=params,
+                                   headers={"Accept": "application/json" if source.feed_format == "cpsc_json" else "application/rss+xml, application/atom+xml, application/xml, text/xml;q=0.9"},
+                                   timeout=20, max_redirects=3) as response:
+                preview = await response.content.read(128)
+                result["diagnostic"] = {
+                    "http_status": response.status,
+                    "content_type": response.headers.get("Content-Type", "")[:100],
+                    "response_bytes_prefix": preview.decode("utf-8", "replace")[:100],
+                    "final_host": response.url.host,
+                }
+        except Exception as diagnostic_error:
+            result["diagnostic_error"] = type(diagnostic_error).__name__
     else:
         result.update({"status": "parsed", "record_count": len(notices)})
     return result
