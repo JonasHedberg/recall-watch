@@ -100,6 +100,25 @@ All code, repository documents and canonical keys are English. UI messages are s
 
 Read [DATA_EXTRACTION.md](docs/DATA_EXTRACTION.md), [SECURITY_AND_PRIVACY.md](docs/SECURITY_AND_PRIVACY.md), [DATA_SOURCES.md](docs/DATA_SOURCES.md) and [SOURCE_REUSE_REVIEW.md](docs/SOURCE_REUSE_REVIEW.md) before relying on the integration.
 
+## Publisher acknowledgement and independent checks
+
+Recall Watch is independent of its source agencies. It links to original recall
+notices from the European Commission's Safety Gate (EU), Livsmedelsverket
+(Sweden), Health Canada / CFIA (Canada), GOV.UK / OPSS (UK), and the US
+Consumer Product Safety Commission. It is **not endorsed by any of them**.
+Please verify models, batch numbers, affected markets and corrective actions in
+the publisher's original notice.
+
+Canada: Contains information licensed under the
+[Open Government Licence – Canada](https://open.canada.ca/open-government-licence-canada).
+UK: Contains public sector information licensed under the
+[Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/).
+EU: Safety Gate notices are credited to the European Commission and the original
+[Safety Gate portal](https://ec.europa.eu/safety-gate-alerts).
+Copyright attribution and third-party rights are discussed in
+[Source reuse research](docs/SOURCE_REUSE_REVIEW.md), with an
+[independent notice spot-check](docs/AUTHORITY_SAMPLE_AUDIT.md).
+
 ## Contribute and maintain
 
 - [Contributing](CONTRIBUTING.md) · [Security reporting](SECURITY.md) · [Support](SUPPORT.md) · [Changelog](CHANGELOG.md)
