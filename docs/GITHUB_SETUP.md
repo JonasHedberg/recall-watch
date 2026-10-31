@@ -2,7 +2,7 @@
 
 **This repository must be public to work with HACS and Home Assistant Marketplace.** See [HACS general requirements](https://hacs.dev/docs/publish/start/) and [Marketplace repository structure](https://contributors.home-assistant.io/marketplace/reference/repository-structure/).
 
-The ZIP package is a **repository snapshot**, not an already-created GitHub repository. It contains placeholders that deliberately prevent release until a real person configures and verifies it.
+The public repository already exists at [JonasHedberg/recall-watch](https://github.com/JonasHedberg/recall-watch). Its initial source tree is a beta candidate, **not a public release**. The instructions below also describe how to set up a fork or other account.
 
 ## 1. Create the repository
 
@@ -57,4 +57,4 @@ See [Release process](RELEASE_PROCESS.md), [HACS / Marketplace](HACS_MARKETPLACE
 
 ## Updating an existing public repository
 
-If `recall-watch` already exists, **do not** run `git init` or create a second repository. Place the files into a feature branch of the existing repository, review `git diff`, run tests, and open a pull request. See [RELEASE_PROCESS.md](RELEASE_PROCESS.md). Updating ZIP files locally does not push or modify GitHub.
+Since `recall-watch` already exists, **do not** run `git init` or create a second repository. Place the files into a feature branch of the existing repository, review `git diff`, run tests, and open a pull request. See [RELEASE_PROCESS.md](RELEASE_PROCESS.md). Updating ZIP files locally does not push or modify GitHub.

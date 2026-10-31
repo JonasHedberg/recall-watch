@@ -2,14 +2,14 @@
 
 **Release blocked:** real-world data and Home Assistant runtime have not been checked.
 
-| Source | Endpoint | Real payload schema | Original URL validation | Errors/recovery | Approved |
-| --- | --- | --- | --- | --- | --- |
-| EU Safety Gate index + two weekly XML detail reports | Pending | Pending | Pending | Pending | No |
-| Swedish Food Agency RSS | Pending | Pending | Pending | Pending | No |
-| Canada food RSS | Pending | Pending | Pending | Pending | No |
-| Canada consumer RSS | Pending | Pending | Pending | Pending | No |
-| GOV.UK OPSS Atom | Pending | Pending | Pending | Pending | No |
-| US CPSC JSON | Pending | Pending | Pending | Pending | No |
+| Data source | Endpoint accessible | Correct RSS/Atom/JSON/XML | Correct language/date/URL | Size < 2 MiB and ≤ 250 records | Outage/recovery | Approved |
+|---|---|---|---|---|---|---|
+| EU Safety Gate XML (index + two reports) | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ |
+| Swedish Food Agency RSS | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ |
+| Canada food RSS | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ |
+| Canada consumer RSS | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ |
+| GOV.UK OPSS Atom | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ |
+| US CPSC JSON (90 days) | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ |
 
 ## Additional release gates
 
