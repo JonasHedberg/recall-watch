@@ -6,16 +6,16 @@
 
 | Verification | Recorded result | Limits |
 |---|---|---|
-| Offline automated tests on Python 3.13 | **92 passed** | Synthetic fixtures and mocked component lifecycle, not a full HA installation |
-| Offline automated tests on Python 3.14 | **92 passed** | Same scope as above |
-| Real Home Assistant 2026.10.4 test API smoke | **2 passed** | Real integration framework; synthetic authority data; setup/unload, sensors/action and config flow checks |
+| Offline automated tests on Python 3.13 | **95 passed** | Synthetic fixtures and mocked component lifecycle, not a full HA installation |
+| Offline automated tests on Python 3.14 | **95 passed** | Same scope as above |
+| Real Home Assistant 2026.10.4 test API smoke | **6 passed** | Real framework, synthetic source responses; includes source isolation, configuration/options, coordinator outage recovery, migration and translations |
 | HACS validator | Passed | Packaging and HACS consistency, not install/upgrade acceptance |
 | Home Assistant hassfest | Passed | Static metadata and schema validation |
 | Six live authority probes | **6/6 sources parsed** | Successful bounded HTTP reads and parsing, not accuracy/completeness certification |
 | Strict response-size bounds | 2 MiB per network response | Hard limit, not a completeness guarantee |
 | Release acceptance evidence | **BLOCKED** | A dated human acceptance record has not been supplied |
 
-Reference: [GitHub Actions run 41184630659](https://github.com/JonasHedberg/recall-watch/actions/runs/41184630659), 31 October 2026; updated document review does not replace re-running the checks on the final exact commit.
+Reference: [GitHub Actions run 41194589214](https://github.com/JonasHedberg/recall-watch/actions/runs/41194589214), 31 October 2026; all six checks passed. Rerun the checks on the exact final accepted commit after further edits.
 
 ## Live source sample (2026-10-31)
 
@@ -41,7 +41,7 @@ All source counts reflect a *limited current response*, never all active notices
 
 ## NOT verified / mandatory before public release
 
-- [ ] Real Home Assistant installed on user hardware/VM: six sources, options/reload, timeouts/outages/recovery, migration, recorder behavior and restart.
+- [ ] Real Home Assistant installation on maintainer hardware/VM: browser/UI, recorder behavior, restart and actual HACS installation (native automated tests cover only the simulated runtime environment).
 - [ ] Manual English and Swedish actual frontend UI review, plus HACS/Marketplace install, upgrade, backup and uninstall.
 - [ ] Representative human-labeled notices from **all six sources** compared to original authority product/brand, date, batch, hazard, case ID and jurisdiction, including withdrawn/corrected notices.
 - [ ] Publisher-specific reuse, attribution and rate-limit review signed by a human maintainer.
@@ -51,4 +51,4 @@ All source counts reflect a *limited current response*, never all active notices
 
 No client-wide statement coverage was measured for this exact PR; earlier coverage figures from `2026-10-24` must not be cited for the new code.
 
-See [Release acceptance](RELEASE_ACCEPTANCE.md), [live acceptance matrix](LIVE_TEST_MATRIX.md), [source reuse research](SOURCE_REUSE_REVIEW.md), and [issue #1](https://github.com/JonasHedberg/recall-watch/issues/1).
+See [Release acceptance](RELEASE_ACCEPTANCE.md), [manual HA acceptance](MANUAL_HA_ACCEPTANCE.md), [independent authority sample audit](AUTHORITY_SAMPLE_AUDIT.md), [live acceptance matrix](LIVE_TEST_MATRIX.md), [source reuse research](SOURCE_REUSE_REVIEW.md), and [issue #1](https://github.com/JonasHedberg/recall-watch/issues/1).

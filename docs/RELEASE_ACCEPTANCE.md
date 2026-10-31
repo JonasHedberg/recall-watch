@@ -4,10 +4,10 @@
 
 ## Mandatory acceptance procedure
 
-1. Test the current candidate in a real supported Home Assistant installation with **all six** configured sources. Verify setup, six sensors per source, the `get_notices` response-only action and proper EU selection.
+1. Follow [Manual Home Assistant acceptance](MANUAL_HA_ACCEPTANCE.md) and test the candidate in a real supported Home Assistant installation with **all six** configured sources. Verify setup, six sensors per source, the `get_notices` response-only action and proper EU selection.
 2. Verify clean install, restart, source deduplication, options update/reload, source unload, migration from Swedish v0.2, loss of network, stale cached data and recovery. Check the real Swedish and English interface.
 3. Run `python scripts/live_source_probe.py --output /tmp/recall-watch-live-results.json` on a networked host. The workflow's optional **Live publisher probes** job runs the same parser on actual public data. Both are probes, not evidence of accurate product classification.
-4. For every source, compare actual product, brand, hazard, batch, identifier, original URL and dates with real authority notices. Explicitly distinguish Safety Gate *alerts* from actual recalls and verify both weekly index and report payloads.
+4. For every source, compare actual product, brand, hazard, batch, identifier, original URL and dates with real authority notices. [Ten independently checked original notices](AUTHORITY_SAMPLE_AUDIT.md) provide a starting point, not a representative acceptance corpus. Explicitly distinguish Safety Gate *alerts* from actual recalls and verify both weekly index and report payloads.
 5. Review source reuse terms, attribution, availability, polling frequency, and regional limitations. Verify HACS/Marketplace installation, upgrade and uninstall in actual Home Assistant.
 6. Ensure all required GitHub checks pass and separately review security and all live-probe results. Fill `docs/release-evidence.json` from the template, with human review identity, current time and HTTPS links to retained proof. Run `python scripts/verify_release_evidence.py`.
 7. Publish a **new** beta tag matching the exact accepted source revision, mark its GitHub Release as **pre-release**, and smoke-test installation from that release. Never claim that a successful mocked unit test is live verification.

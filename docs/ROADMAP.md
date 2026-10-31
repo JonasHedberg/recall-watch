@@ -6,7 +6,7 @@ Six curated government feed adapters: European Union Safety Gate dangerous non-f
 
 Implemented: per-source setup and keyword filters, six sensors per source, bounded preview and paginated `get_notices` action, localized English/Swedish UI strings, coordinator polling, network/parse errors, conservative extraction, migration logic for Swedish v0.2.
 
-As of 2026-10-31, [PR #12](https://github.com/JonasHedberg/recall-watch/pull/12) contains offline regressions, live read/parse probes (all six sources) and a limited native Home Assistant smoke test. **It remains a draft, not a public-release approval.**
+As of 2026-10-31, [PR #12](https://github.com/JonasHedberg/recall-watch/pull/12) contains offline regressions, live read/parse probes (all six sources) and six native Home Assistant smoke/contract tests. **It remains a draft, not a public-release approval.**
 
 ## Release milestones
 
