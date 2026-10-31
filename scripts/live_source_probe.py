@@ -27,6 +27,8 @@ async def check_source(session: aiohttp.ClientSession, source_id: str) -> dict:
             raise ValueError("No verifiable authority link in response")
     except Exception as exc:
         result["error"] = f"{type(exc).__name__}: {str(exc)[:180]}"
+        if exc.__cause__ is not None:
+            result["parse_cause"] = f"{type(exc.__cause__).__name__}: {str(exc.__cause__)[:180]}"
         # Diagnostic requests use only the same fixed government endpoints and
         # record metadata plus a bounded public-response prefix. No credentials.
         from _client.sources import SOURCES as SOURCE_REGISTRY
@@ -36,12 +38,15 @@ async def check_source(session: aiohttp.ClientSession, source_id: str) -> dict:
             async with session.get(source.url, params=params,
                                    headers={"Accept": "application/json" if source.feed_format == "cpsc_json" else "application/rss+xml, application/atom+xml, application/xml, text/xml;q=0.9"},
                                    timeout=20, max_redirects=3) as response:
-                preview = await response.content.read(128)
+                preview = await response.content.read(2 * 1024 * 1024 + 1)
                 result["diagnostic"] = {
                     "http_status": response.status,
                     "content_type": response.headers.get("Content-Type", "")[:100],
                     "response_bytes_prefix": preview.decode("utf-8", "replace")[:100],
                     "final_host": response.url.host,
+                    "content_length_header": response.headers.get("Content-Length", ""),
+                    "bytes_read_bounded": len(preview),
+                    "exceeds_2mb_limit": len(preview) > 2 * 1024 * 1024,
                 }
         except Exception as diagnostic_error:
             result["diagnostic_error"] = type(diagnostic_error).__name__
