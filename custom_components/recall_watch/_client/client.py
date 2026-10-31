@@ -66,10 +66,11 @@ class RecallClient:
                 headers={"Accept": accept},
                 **({"params": query} if query else {}),
                 timeout=20,
-                allow_redirects=self.source.feed_format != "safety_gate_xml",
-                max_redirects=3,
+                allow_redirects=False,  # Never follow redirects to unapproved hosts (SSRF defense).
             ) as response:
                 response.raise_for_status()
+                if 300 <= getattr(response, "status", 200) < 400:
+                    raise RecallHTTPError("Official recall endpoint redirected unexpectedly")
                 content = await _read_bounded(response.content)
         except ClientResponseError as err:
             raise RecallHTTPError(f"Recall source returned HTTP {err.status}") from err

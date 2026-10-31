@@ -136,6 +136,10 @@ def test_date_capture_stops_at_new_section() -> None:
     assert result.best_before_dates == ("2027-05-12",)
     assert result.batch_numbers == ("AB12",)
 
+def test_live_canadian_fall_hazard() -> None:
+    assert extract_recall_details("Harkla Children’s Compression Sensory Swings recalled due to fall hazard", "").risk_type == "fall"
+
+
 def test_live_swedish_recall_title_stops_before_hazard() -> None:
     assert extract_recall_details("Coop återkallar fryst röd chili - kan innehålla kadmium", "").product == "fryst röd chili"
     assert extract_recall_details("Arla återkallar proteinpudding då produkterna kan innehålla små glasfragment", "").product == "proteinpudding"

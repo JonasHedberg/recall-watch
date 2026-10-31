@@ -88,7 +88,7 @@ class RecallLatestFieldSensor(_FilteredRecallSensor):
             self._attr_device_class = SensorDeviceClass.ENUM
             self._attr_options = [
                 "allergen", "chemical", "foreign_object", "microbiological",
-                "labelling", "packaging", "fire", "burn", "electric_shock", "choking", "multiple",
+                "labelling", "packaging", "fire", "burn", "electric_shock", "choking", "fall", "multiple",
             ]
 
     @property

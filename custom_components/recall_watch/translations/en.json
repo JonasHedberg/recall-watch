@@ -50,7 +50,8 @@
           "fire": "Fire hazard",
           "burn": "Burn hazard",
           "electric_shock": "Electric shock",
-          "choking": "Choking hazard"
+          "choking": "Choking hazard",
+          "fall": "Fall hazard"
         }
       },
       "latest_batch_number": {
