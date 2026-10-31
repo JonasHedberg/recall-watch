@@ -17,6 +17,25 @@ from .sources import DEFAULT_SOURCE, SOURCES
 SWEDISH_FOOD_RECALLS_URL = SOURCES[DEFAULT_SOURCE].url  # Legacy import compatibility.
 
 
+async def _read_bounded(content) -> bytes:
+    """Read all available stream chunks up to the hard response size limit.
+
+    aiohttp StreamReader.read(n) may return fewer than n bytes before EOF.
+    Never pass truncated XML/JSON on to a parser.
+    """
+    chunks: list[bytes] = []
+    remaining = MAX_FEED_BYTES + 1
+    while remaining:
+        chunk = await content.read(remaining)
+        if not chunk:
+            break
+        if len(chunk) > remaining:
+            raise RecallParseError("Recall source exceeds the size limit")
+        chunks.append(chunk)
+        remaining -= len(chunk)
+    return b"".join(chunks)
+
+
 class RecallClient:
     """Stateless per-source polling client using a caller-owned session."""
 
@@ -47,11 +66,12 @@ class RecallClient:
                 headers={"Accept": accept},
                 **({"params": query} if query else {}),
                 timeout=20,
-                allow_redirects=self.source.feed_format != "safety_gate_xml",
-                max_redirects=3,
+                allow_redirects=False,  # Never follow redirects to unapproved hosts (SSRF defense).
             ) as response:
                 response.raise_for_status()
-                content = await response.content.read(MAX_FEED_BYTES + 1)
+                if 300 <= getattr(response, "status", 200) < 400:
+                    raise RecallHTTPError("Official recall endpoint redirected unexpectedly")
+                content = await _read_bounded(response.content)
         except ClientResponseError as err:
             raise RecallHTTPError(f"Recall source returned HTTP {err.status}") from err
         except (ClientError, asyncio.TimeoutError) as err:
@@ -71,7 +91,7 @@ class RecallClient:
                         timeout=20, allow_redirects=False,
                     ) as detail:
                         detail.raise_for_status()
-                        document = await detail.content.read(MAX_FEED_BYTES + 1)
+                        document = await _read_bounded(detail.content)
                 except ClientResponseError as err:
                     raise RecallHTTPError(f"Safety Gate returned HTTP {err.status}") from err
                 except (ClientError, asyncio.TimeoutError) as err:

@@ -98,7 +98,7 @@ def test_paginated_results_and_bounds() -> None:
     assert result["has_more"] is True
     assert len(result["notices"]) == 3
     assert MAX_PREVIEW <= 10
-    for kwargs in ({"offset": -1}, {"limit": 0}, {"limit": 101}, {"offset": 251}):
+    for kwargs in ({"offset": -1}, {"limit": 0}, {"limit": 101}, {"offset": 501}):
         with pytest.raises(ValueError):
             page_notices(notices, **kwargs)
 
@@ -135,3 +135,32 @@ def test_date_capture_stops_at_new_section() -> None:
     )
     assert result.best_before_dates == ("2027-05-12",)
     assert result.batch_numbers == ("AB12",)
+
+def test_live_canadian_fall_hazard() -> None:
+    assert extract_recall_details("Harkla Children’s Compression Sensory Swings recalled due to fall hazard", "").risk_type == "fall"
+
+
+def test_live_swedish_recall_title_stops_before_hazard() -> None:
+    assert extract_recall_details("Coop återkallar fryst röd chili - kan innehålla kadmium", "").product == "fryst röd chili"
+    assert extract_recall_details("Arla återkallar proteinpudding då produkterna kan innehålla små glasfragment", "").product == "proteinpudding"
+
+
+def test_explicit_canadian_and_uk_recall_headlines() -> None:
+    ca = extract_recall_details("Snow Crab Flavoured Surimi Stick recalled due to undeclared egg and soy", "")
+    assert ca.product == "Snow Crab Flavoured Surimi Stick"
+    assert ca.risk_type == "allergen"
+    uk = extract_recall_details("Product Recall: HAMAX Buddy Baby Seat (2610-0181)", "")
+    assert uk.product == "HAMAX Buddy Baby Seat"
+    assert uk.brand is None
+
+
+def test_brand_name_without_delimiter_not_brand() -> None:
+    details = extract_recall_details("HAIARA Power Banks Recalled Due to Risk of Serious Injury from Fire and Burn Hazards", "Brand Name not reported")
+    assert details.brand is None
+    assert details.risk_type == "multiple"
+    assert extract_recall_details("Notice", "Brand name: ActualBrand").brand == "ActualBrand"
+
+
+def test_english_undeclared_allergen_and_fire_burn() -> None:
+    assert extract_recall_details("DREO Space Heaters recalled due to fire and burn hazards", "").risk_type == "multiple"
+    assert extract_recall_details("Sunchanggung 990 Ssamjang recalled due to undeclared sesame", "").risk_type == "allergen"

@@ -31,13 +31,21 @@ _PRODUCT = re.compile(
     r"(?P<value>[^.!?\n]{2,180})",
     re.IGNORECASE,
 )
+_UK_RECALL_TITLE = re.compile(
+    r"^Product Recall:\s*(?P<product>.+?)(?:\s*\(\d{4}-\d{4}\))?\s*$", re.I
+)
+_CANADA_RECALL_TITLE = re.compile(
+    r"^(?P<product>.+?)\s+recalled\s+due\s+to\b", re.I
+)
 _PRODUCT_END = re.compile(
     r"\s+(?:på grund av|p\.?g\.?a\.?|efter att|då (?:den|det|de)|som kan|"
+    r"kan\s+innehålla|då\s+produkterna?\s+kan|may\s+contain|can\s+contain|"
     r"eftersom|till följd av|due to|because of|for possible|after discovering|risk för)\b",
     re.IGNORECASE,
 )
 _BRAND = re.compile(
-    r"\b(?:varumärke|varumärket|av märket|märket|brand)\s*:?\s*"
+    r"\b(?:(?:varumärke|varumärket|brand(?:\s+name)?)\s*:\s*|"
+    r"(?:av märket|märket)\s+)"
     r"(?P<value>[\wÅÄÖåäö][\wÅÄÖåäö&'\- ]{1,65})",
     re.IGNORECASE,
 )
@@ -79,7 +87,8 @@ _RISK_PATTERNS: dict[str, re.Pattern[str]] = {
         r"\b(?:odeklarerad(?:e|t)?\s+allergen(?:er)?|odeklarerad(?:e|t)?\s+"
         r"(?:mjölk|ägg|nötter|gluten|soja|jordnötter)|felaktig\s+allergenmärkning|"
         r"allergen(?:er)?\s+(?:saknas|inte\s+deklarerad)|"
-        r"risk\s+för\s+allergisk\s+reaktion|undeclared\s+allergen)\b", re.I
+        r"risk\s+för\s+allergisk\s+reaktion|undeclared\s+allergen(?:s)?|"
+        r"undeclared\s+(?:egg|soy|sesame|milk|peanuts?|wheat|gluten|nuts?))\b", re.I
     ),
     "foreign_object": re.compile(
         r"\b(?:glasfragment|glasbitar|metallfragment|metallbitar|plastfragment|"
@@ -98,10 +107,11 @@ _RISK_PATTERNS: dict[str, re.Pattern[str]] = {
         r"\b(?:felmärkning|felmärkt(?:a)?|felaktig\s+märkning|"
         r"incorrect(?:ly)?\s+labell?ing|mislabelled)\b", re.I
     ),
-    "fire": re.compile(r"\b(?:fire\s+hazard|risk\s+of\s+fire|brandrisk)\b", re.I),
-    "burn": re.compile(r"\b(?:burn\s+hazard|risk\s+of\s+burns|brännskador)\b", re.I),
+    "fire": re.compile(r"\b(?:fire\s+(?:and\s+burn\s+)?hazards?|risk\s+of\s+fire|brandrisk)\b", re.I),
+    "burn": re.compile(r"\b(?:burn\s+hazards?|risk\s+of\s+burns|brännskador)\b", re.I),
     "electric_shock": re.compile(r"\b(?:electric\s+shock|electrocution|elektrisk\s+stöt)\b", re.I),
     "choking": re.compile(r"\b(?:choking\s+hazard|kvävningsrisk)\b", re.I),
+    "fall": re.compile(r"\b(?:fall\s+hazard|fallrisk|risk\s+of\s+falling)\b", re.I),
     "packaging": re.compile(
         r"\b(?:defekt\s+förpackning|felaktig\s+förpackning|"
         r"skadad\s+förpackning|defective\s+packaging)\b", re.I
@@ -120,6 +130,13 @@ def _clean(value: str) -> str | None:
 
 
 def _product(title: str) -> str | None:
+    """Parse only explicitly marked product headlines, without company inference."""
+    uk = _UK_RECALL_TITLE.fullmatch(title)
+    if uk:
+        return _clean(uk.group("product"))
+    ca = _CANADA_RECALL_TITLE.match(title)
+    if ca:
+        return _clean(ca.group("product"))
     match = _PRODUCT.search(title)
     if match is None:
         return None

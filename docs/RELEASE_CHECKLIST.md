@@ -1,32 +1,30 @@
-# Release checklist — Recall Watch v0.4.0b1
+# Release checklist — next public beta candidate
 
-Status: **not release approved**.
+**NOT RELEASE APPROVED.** Do not reuse/overwrite the existing public `v0.4.0b1` tag. Run `python scripts/verify_release_evidence.py` only after attaching genuine, recent evidence and completing [Release acceptance](RELEASE_ACCEPTANCE.md).
 
-- [x] Add EU Safety Gate official weekly XML source to curated registry.
-- [x] Parse weekly-report index and report details using defusedxml and bounded reads.
-- [x] Offline safety tests and source-isolation regression tests (77/77 passing on development environment).
-- [x] Update README and changelog for new EU source.
-- [ ] Live-fetch the official EU XML index and report details.
-- [ ] Verify real product, hazard, date, and original-link extraction against the Commission portal.
-- [ ] Validate all other live sources.
-- [ ] Run tests on supported Home Assistant runtime.
-- [ ] Pass GitHub Actions CI, hassfest, HACS validation.
-- [ ] Review European Commission Safety Gate reuse and attribution terms.
-- [ ] Manual smoke tests for multilingual UI, setup, reload, error handling and migration.
-- [ ] Approve release and create version tag only after all preceding gates pass.
+## Implemented and tested in PR #12
 
-## Additional global beta release gates (0.4.0b1)
+- [x] EU Safety Gate index/report support with fixed government endpoints, bounded `defusedxml` parsing and country-specific source isolation.
+- [x] EU action selector and full possible weekly-report pagination; regression tests.
+- [x] Complete bounded HTTP stream reads, including chunked responses; regression tests.
+- [x] CPSC update-aware ordering, preserving original recall date; regression tests.
+- [x] Conservative product/risk extraction improvements based on inspected live examples; regression tests.
+- [x] 95 offline tests on each of Python 3.13 and 3.14 (2026-10-31).
+- [x] 6 genuine Home Assistant 2026.10.4 framework tests for setup/config/action/unload, two source isolation, options, outage/recovery, migration and locale loading (2026-10-31).
+- [x] Passing HACS and Home Assistant hassfest validators (2026-10-31).
+- [x] Six publisher endpoints successfully fetched and parsed by a bounded live CI probe (2026-10-31).
+- [x] English and Swedish locale key parity; translated actual frontend remains unchecked.
+- [x] Preliminary publisher reuse research recorded in [Source reuse review](SOURCE_REUSE_REVIEW.md).
 
-- [ ] Verify **each of all six** official source endpoints and real response shapes, error conditions, terms of service, attribution and update cadence.
-- [ ] Test CPSC 90-day `LastPublishDateStart` filtering against a real upstream response; confirm payload size and no silent pagination/truncation.
-- [ ] Verify UK and Canada feeds remain stable and meet the configured 2 MB response limit.
-- [ ] Verify multiple sources installed together, individually configured, reloaded and removed without cross-source leakage.
-- [ ] Confirm the v0.2 Swedish configuration migrates safely to `se_food`, including preserving entity unique IDs.
-- [ ] Inspect Swedish/English translations, country labels, and original-language notice semantics in a real HA UI.
-- [ ] Verify HACS multi-country listing behavior after removing `country: SE` from `hacs.json`.
-- [ ] Publish only after signing off on [data-source status](DATA_SOURCES.md); do **not** claim exhaustive EU/worldwide coverage.
+## Must be completed before releasing
 
-- [ ] Complete the manual [live-test matrix](LIVE_TEST_MATRIX.md) and [migration guide](MIGRATION.md).
+- [ ] Complete representative original-notice accuracy assessment, especially EU detail records and corrected/withdrawn notices; [ten independent spot checks](AUTHORITY_SAMPLE_AUDIT.md) completed but do not meet full acceptance.
+- [ ] Test all six sources in an actual Home Assistant installation, user-facing English and Swedish UI, migration, restart, reconfiguration, outage and stale-state recovery.
+- [ ] Confirm HACS/Marketplace install/upgrade/uninstall from the proposed release.
+- [ ] Confirm the publisher's specific reuse terms, logo/trademark rights, licence/attribution and responsible polling with a human maintainer.
+- [ ] Reclassify or withdraw prior published `v0.4.0b1` as an unapproved beta; do not modify an existing tag's history.
+- [ ] Human review and timestamped release evidence linked to GitHub artifacts/source comparisons.
+- [ ] Run `python scripts/verify_release_evidence.py` successfully and manually review the evidence; check CI at the final exact commit.
+- [ ] Mark the next beta GitHub Release as prerelease and smoke-test its fresh installation.
 
-- [ ] Live-test the European Commission weekly XML index and two detail reports; confirm IDs, dates, official hyperlinks, CDATA text, response sizes, schema, safety and attribution.
-- [ ] Distinguish EU dangerous-product alerts from actual consumer recalls in the UI and documentation.
+See [Live test matrix](LIVE_TEST_MATRIX.md), [Manual HA acceptance](MANUAL_HA_ACCEPTANCE.md), [authority sample audit](AUTHORITY_SAMPLE_AUDIT.md), and [QA report](QA_REPORT.md). A recall-monitoring tool must never claim that absent notifications establish product safety.

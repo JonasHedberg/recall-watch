@@ -78,8 +78,11 @@ async def test_client_source_transport_selection():
         def __init__(self, payload):
             self.content = self
             self.payload = payload
+            self.offset = 0
         async def read(self, n):
-            return self.payload[:n]
+            chunk = self.payload[self.offset:self.offset+n]
+            self.offset += len(chunk)
+            return chunk
         def raise_for_status(self):
             pass
         async def __aenter__(self):
@@ -124,7 +127,7 @@ def test_cpsc_optional_values_are_safely_ignored():
                   RecallDate=None, URL=42, Products=None, Hazards=None,
                   Description=42)
     result = parse_cpsc_recalls(json.dumps([record]).encode())[0]
-    assert result.details.product is None
+    assert result.details.product == "Example electric kettles"  # Explicit headline fallback
     assert result.published is None
     assert result.url is None
     assert result.identifier == record["Title"]
@@ -134,3 +137,32 @@ def test_cpsc_rejects_impossible_timestamp_without_crash():
     record = dict(CPSC_SAMPLE[0], RecallDate="/Date(999999999999999999999999999)/")
     result = parse_cpsc_recalls(json.dumps([record]).encode())[0]
     assert result.published is None
+
+def test_cpsc_updated_old_recall_first() -> None:
+    old = dict(CPSC_SAMPLE[0], RecallID=111, RecallDate="2020-01-01", LastPublishDate="2026-10-29")
+    recent = dict(CPSC_SAMPLE[0], RecallID=222, RecallDate="2026-10-20", LastPublishDate="2026-10-20")
+    notices = parse_cpsc_recalls(json.dumps([recent, old]).encode())
+    assert [notice.identifier for notice in notices] == ["111", "222"]
+    assert notices[0].published == datetime(2020, 1, 1)
+    assert notices[0].updated == datetime(2026, 10, 29)
+    assert serialize_notice(notices[0])["updated"].startswith("2026-10-29")
+    assert serialize_notice(notices[0])["published"].startswith("2020-01-01")
+
+
+def test_cpsc_sort_timezone_and_invalid_update() -> None:
+    records = [
+        dict(CPSC_SAMPLE[0], RecallID=1, RecallDate="2026-10-20", LastPublishDate="2026-10-29T10:00:00+02:00"),
+        dict(CPSC_SAMPLE[0], RecallID=2, RecallDate="2026-10-19", LastPublishDate="2026-10-29T09:00:00Z"),
+        dict(CPSC_SAMPLE[0], RecallID=3, RecallDate="2026-10-21", LastPublishDate="invalid"),
+    ]
+    assert [n.identifier for n in parse_cpsc_recalls(json.dumps(records).encode())] == ["2", "1", "3"]
+
+
+def test_pagination_reaches_500th_eu_alert() -> None:
+    from _client import page_notices
+    notice = parse_recall_feed(b"<rss><channel><item><title>Test</title></item></channel></rss>")[0]
+    items = (notice,) * 500
+    assert len(page_notices(items, offset=499, limit=100)["notices"]) == 1
+    assert page_notices(items, offset=500, limit=20)["notices"] == []
+    with pytest.raises(ValueError):
+        page_notices(items, offset=501, limit=20)

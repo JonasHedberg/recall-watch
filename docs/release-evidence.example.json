@@ -1,0 +1,48 @@
+{
+  "release_tag": "REPLACE_ME",
+  "reviewed_by": "",
+  "reviewed_at": "",
+  "sources": {
+    "eu_safety_gate": {
+      "live_parser_passed": false,
+      "manual_authority_comparison": false,
+      "evidence_url": ""
+    },
+    "se_food": {
+      "live_parser_passed": false,
+      "manual_authority_comparison": false,
+      "evidence_url": ""
+    },
+    "ca_food": {
+      "live_parser_passed": false,
+      "manual_authority_comparison": false,
+      "evidence_url": ""
+    },
+    "ca_consumer": {
+      "live_parser_passed": false,
+      "manual_authority_comparison": false,
+      "evidence_url": ""
+    },
+    "uk_consumer": {
+      "live_parser_passed": false,
+      "manual_authority_comparison": false,
+      "evidence_url": ""
+    },
+    "us_consumer": {
+      "live_parser_passed": false,
+      "manual_authority_comparison": false,
+      "evidence_url": ""
+    }
+  },
+  "checks": {
+    "real_home_assistant_setup_and_unload": false,
+    "real_home_assistant_options_reload": false,
+    "english_and_swedish_ui": false,
+    "migration_from_prior_release": false,
+    "failure_recovery_and_stale_data": false,
+    "hacs_install_upgrade_and_uninstall": false,
+    "publisher_terms_and_attribution_reviewed": false,
+    "recall_accuracy_manually_compared_with_authority": false,
+    "github_ci_and_security_review": false
+  }
+}

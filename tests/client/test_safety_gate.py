@@ -68,8 +68,11 @@ async def test_client_uses_bounded_fixed_endpoint_and_deduplicates():
     class Response:
         def __init__(self, payload):
             self.content, self.payload = self, payload
+            self.offset = 0
         async def read(self, max_bytes):
-            return self.payload[:max_bytes]
+            chunk = self.payload[self.offset:self.offset+max_bytes]
+            self.offset += len(chunk)
+            return chunk
         def raise_for_status(self):
             pass
         async def __aenter__(self):
