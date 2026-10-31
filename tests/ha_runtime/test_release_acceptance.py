@@ -74,12 +74,11 @@ async def test_real_ha_multiple_sources_options_reload_and_unload(hass) -> None:
         assert hass.states.get(_count_entity(hass, entries[0])).state == "1"
         assert hass.states.get(_count_entity(hass, entries[1])).state == "1"
 
-        # Home Assistant catches service-level HomeAssistantError and returns None
-        # to callers in this runtime; ambiguous source must not leak notice data.
-        ambiguous = await hass.services.async_call(
-            DOMAIN, "get_notices", {}, blocking=True, return_response=True,
-        )
-        assert ambiguous is None
+        # Ambiguous source IDs fail safely; no notice data is returned.
+        with pytest.raises(HomeAssistantError, match="Provide a source"):
+            await hass.services.async_call(
+                DOMAIN, "get_notices", {}, blocking=True, return_response=True,
+            )
 
         for source_id in ("se_food", "ca_food"):
             results = await hass.services.async_call(
