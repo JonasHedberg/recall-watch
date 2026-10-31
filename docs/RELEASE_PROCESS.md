@@ -4,6 +4,7 @@ There are **three separate milestones**: a public source repository, a pre-relea
 
 ## A. Before any public beta release
 
+0. Follow [Release acceptance](RELEASE_ACCEPTANCE.md) and run `python scripts/verify_release_evidence.py`. Passing mocked tests does not authorize a public release.
 1. Assign a human maintainer, replace all owner placeholders, inspect third-party license obligations and confirm repository visibility is public.
 2. Run `python -m pytest -q` and `python scripts/validate_repository.py` locally.
 3. Run an actual supported Home Assistant instance with the component installed and exercise setup, options, sensors, `recall_watch.get_notices`, reload/unload and Swedish/English translations.

@@ -22,7 +22,7 @@ SERVICE_GET_NOTICES = "get_notices"
 _GET_NOTICES_SCHEMA = vol.Schema({
     vol.Optional("source"): vol.In(list(SOURCES)),
     vol.Optional("matching_only", default=True): bool,
-    vol.Optional("offset", default=0): vol.All(vol.Coerce(int), vol.Range(min=0, max=250)),
+    vol.Optional("offset", default=0): vol.All(vol.Coerce(int), vol.Range(min=0, max=500)),
     vol.Optional("limit", default=20): vol.All(vol.Coerce(int), vol.Range(min=1, max=100)),
 })
 

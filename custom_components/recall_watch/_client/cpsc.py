@@ -88,12 +88,18 @@ def parse_cpsc_recalls(data: bytes, *, source_id: str = "us_consumer") -> tuple[
             title=title,
             url=url,
             published=_recall_date(record.get("RecallDate")),
+            updated=_recall_date(record.get("LastPublishDate")),
             summary=summary,
             details=details,
             source_id=source_id,
         ))
-    return tuple(sorted(
-        output,
-        key=lambda notice: (notice.published or datetime.min.replace(tzinfo=timezone.utc)).isoformat(),
-        reverse=True,
-    ))
+    def chronological_key(notice: RecallNotice) -> tuple[datetime, datetime, str]:
+        """Order amended recalls by last publication date, not original issue date."""
+        def utc(date: datetime | None) -> datetime:
+            if date is None:
+                return datetime.min.replace(tzinfo=timezone.utc)
+            return date.replace(tzinfo=timezone.utc) if date.tzinfo is None else date.astimezone(timezone.utc)
+
+        return (utc(notice.updated or notice.published), utc(notice.published), notice.identifier)
+
+    return tuple(sorted(output, key=chronological_key, reverse=True))

@@ -1,6 +1,6 @@
 # Recall Watch — International product recall monitoring for Home Assistant
 
-> **0.4.0b1 — UNRELEASED BETA CANDIDATE. Not validated in a real Home Assistant runtime or against current production feed payloads.** This is a third-party Home Assistant integration, not an official Home Assistant Core integration, an official government service, or a substitute for checking authoritative safety notices. Do **not** publish a release until [every release gate](docs/RELEASE_CHECKLIST.md) is cleared.
+> **0.4.0b1 — UNRELEASED BETA CANDIDATE. Not validated in a real Home Assistant runtime or against current production feed payloads.** This is a third-party Home Assistant integration, not an official Home Assistant Core integration, an official government service, or a substitute for checking authoritative safety notices. Do **not** publish a release until [every release gate](docs/RELEASE_ACCEPTANCE.md) is cleared.
 
 Recall Watch surfaces official recall notices as Home Assistant sensors and a response-only action. Choose one or more supported country-specific sources. Each configured source is independent, with its own keyword filter, coordinator and entity set. The integration never uploads keyword lists to a Recall Watch server; queries use only fixed government endpoints.
 
@@ -28,6 +28,7 @@ Official-source references and exact fixed URLs are documented in [DATA_SOURCES.
 - Matching notice count; latest product, brand, hazard category, batch and best-before date sensors.
 - Bounded five-notice preview in sensor attributes; original notice hyperlinks and source/country/category metadata.
 - `recall_watch.get_notices` response-only action for paginated results from the **last successful** source fetch, with optional source choice and matching filter.
+- US CPSC recalls are sorted by last publication/update date (fallback: original recall date); timestamps remain separately available.
 - Best-effort, deterministic extraction from source text. Unknown details remain unknown. CPSC product names are read directly from structured JSON; manufacturers are **not** inferred to be brands.
 - English default messages with Swedish (`sv`) translations, designed for future locales.
 - Offline unit tests, mocked integration contract tests, CI and release safety checks.
@@ -59,6 +60,7 @@ Each configured source creates six sensors: a matching count sensor and five sen
   "category": "consumer",
   "identifier": "example-not-a-real-recall",
   "title": "Example product recalled due to fire hazard",
+  "updated": "2026-10-22T00:00:00+00:00",
   "product": "Example kettle",
   "brand": null,
   "risk_type": "fire",
@@ -101,7 +103,7 @@ Read [DATA_EXTRACTION.md](docs/DATA_EXTRACTION.md), [SECURITY_AND_PRIVACY.md](do
 ## Contribute and maintain
 
 - [Contributing](CONTRIBUTING.md) · [Security reporting](SECURITY.md) · [Support](SUPPORT.md) · [Changelog](CHANGELOG.md)
-- [Development](docs/DEVELOPMENT.md) · [Quality verification](docs/QA_REPORT.md) · [Release gates](docs/RELEASE_CHECKLIST.md)
+- [Development](docs/DEVELOPMENT.md) · [Quality verification](docs/QA_REPORT.md) · [Release acceptance](docs/RELEASE_ACCEPTANCE.md) · [Release checklist](docs/RELEASE_CHECKLIST.md)
 - [Repository publishing](docs/GITHUB_SETUP.md) · [Roadmap](docs/ROADMAP.md)
 
 License: [MIT](LICENSE). Copyright (c) 2026 Recall Watch contributors.

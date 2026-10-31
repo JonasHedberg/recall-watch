@@ -12,6 +12,7 @@ get_notices:
       selector:
         select:
           options:
+            - {value: eu_safety_gate, label: European Union - Safety Gate alerts}
             - {value: se_food, label: Swedish Food Agency}
             - {value: ca_food, label: Canada - Food}
             - {value: ca_consumer, label: Canada - Consumer Products}
@@ -26,13 +27,13 @@ get_notices:
         boolean:
     offset:
       name: Offset
-      description: Number of current notices to skip (0–250).
+      description: Number of current notices to skip (0–500).
       required: false
       default: 0
       selector:
         number:
           min: 0
-          max: 250
+          max: 500
           mode: box
     limit:
       name: Page size

@@ -9,6 +9,8 @@ from .sources import SOURCES
 
 MAX_PREVIEW = 5
 MAX_PAGE_SIZE = 100
+# Up to two EU reports, each limited to 250 alerts.
+MAX_OFFSET = 500
 
 
 def serialize_notice(notice: RecallNotice, *, include_summary: bool = False) -> dict[str, Any]:
@@ -22,6 +24,7 @@ def serialize_notice(notice: RecallNotice, *, include_summary: bool = False) -> 
         "title": notice.title[:255],
         "url": notice.url,
         "published": notice.published.isoformat() if notice.published else None,
+        "updated": notice.updated.isoformat() if notice.updated else None,
         "product": details.product,
         "brand": details.brand,
         "risk_type": details.risk_type,
@@ -37,7 +40,7 @@ def page_notices(
     notices: tuple[RecallNotice, ...], *, offset: int = 0, limit: int = 20
 ) -> dict[str, Any]:
     """Paginate the cached feed; never make per-page network requests."""
-    if not 0 <= offset <= 250 or not 1 <= limit <= MAX_PAGE_SIZE:
+    if not 0 <= offset <= MAX_OFFSET or not 1 <= limit <= MAX_PAGE_SIZE:
         raise ValueError("Invalid pagination")
     return {
         "total": len(notices),

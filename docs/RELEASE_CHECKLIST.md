@@ -1,3 +1,5 @@
+**Release gate:** Run `python scripts/verify_release_evidence.py`; it fails until all live-source, real-HA and human acceptance evidence exists. See [RELEASE_ACCEPTANCE.md](RELEASE_ACCEPTANCE.md).
+
 # Release checklist — Recall Watch v0.4.0b1
 
 Status: **not release approved**.

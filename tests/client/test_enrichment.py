@@ -98,7 +98,7 @@ def test_paginated_results_and_bounds() -> None:
     assert result["has_more"] is True
     assert len(result["notices"]) == 3
     assert MAX_PREVIEW <= 10
-    for kwargs in ({"offset": -1}, {"limit": 0}, {"limit": 101}, {"offset": 251}):
+    for kwargs in ({"offset": -1}, {"limit": 0}, {"limit": 101}, {"offset": 501}):
         with pytest.raises(ValueError):
             page_notices(notices, **kwargs)
 

@@ -47,3 +47,15 @@ def test_release_files_and_dependencies() -> None:
 def test_resources_present() -> None:
     assert (COMPONENT / "brand/icon.png").stat().st_size > 100
     assert (COMPONENT / "brand/logo.png").stat().st_size > 100
+
+def test_action_source_selector_is_in_sync_with_registry() -> None:
+    import sys
+    import yaml
+
+    sys.path.insert(0, str(COMPONENT))
+    from _client.sources import SOURCES
+    from _client.serialization import MAX_OFFSET
+    fields = yaml.safe_load((COMPONENT / "services.yaml").read_text())["get_notices"]["fields"]
+    ids = {entry["value"] for entry in fields["source"]["selector"]["select"]["options"]}
+    assert ids == set(SOURCES)
+    assert fields["offset"]["selector"]["number"]["max"] == MAX_OFFSET

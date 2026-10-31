@@ -70,6 +70,8 @@ class RecallNoticesSensor(_FilteredRecallSensor):
                 result["latest_url"] = latest.url
             if latest.published is not None:
                 result["latest_published"] = latest.published.isoformat()
+            if latest.updated is not None:
+                result["latest_updated"] = latest.updated.isoformat()
         return result
 
 

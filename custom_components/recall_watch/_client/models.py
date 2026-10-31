@@ -18,3 +18,4 @@ class RecallNotice:
     summary: str
     details: RecallDetails = field(default_factory=RecallDetails)
     source_id: str = "se_food"
+    updated: datetime | None = None
