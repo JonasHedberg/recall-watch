@@ -15,10 +15,14 @@ class FakeContent:
     def __init__(self, payload: bytes) -> None:
         self.payload = payload
         self.read_size: int | None = None
+        self.offset = 0
 
     async def read(self, size: int) -> bytes:
-        self.read_size = size
-        return self.payload[:size]
+        if self.read_size is None:
+            self.read_size = size
+        chunk = self.payload[self.offset:self.offset + size]
+        self.offset += len(chunk)
+        return chunk
 
 
 class FakeResponse:
@@ -98,3 +102,16 @@ async def test_oversized_content_rejected() -> None:
     response = FakeResponse(b"x" * (MAX_FEED_BYTES + 1))
     with pytest.raises(RecallParseError, match="size limit"):
         await RecallClient(FakeSession(response)).async_get_notices()  # type: ignore[arg-type]
+
+@pytest.mark.asyncio
+async def test_http_body_in_multiple_chunks() -> None:
+    """Aiohttp read(n) may return less than requested, even without EOF."""
+    class FragmentedContent(FakeContent):
+        async def read(self, size: int) -> bytes:
+            return await super().read(min(size, 9))
+
+    response = FakeResponse(b"<rss><channel><item><title>Complete record</title></item></channel></rss>")
+    response.content = FragmentedContent(response.content.payload)
+    notices = await RecallClient(FakeSession(response)).async_get_notices()  # type: ignore[arg-type]
+    assert len(notices) == 1
+    assert notices[0].title == "Complete record"

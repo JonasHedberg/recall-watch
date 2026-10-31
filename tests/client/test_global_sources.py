@@ -78,8 +78,11 @@ async def test_client_source_transport_selection():
         def __init__(self, payload):
             self.content = self
             self.payload = payload
+            self.offset = 0
         async def read(self, n):
-            return self.payload[:n]
+            chunk = self.payload[self.offset:self.offset+n]
+            self.offset += len(chunk)
+            return chunk
         def raise_for_status(self):
             pass
         async def __aenter__(self):
