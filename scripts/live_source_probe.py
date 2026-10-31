@@ -51,7 +51,24 @@ async def check_source(session: aiohttp.ClientSession, source_id: str) -> dict:
         except Exception as diagnostic_error:
             result["diagnostic_error"] = type(diagnostic_error).__name__
     else:
-        result.update({"status": "parsed", "record_count": len(notices)})
+        result.update({
+            "status": "parsed",
+            "record_count": len(notices),
+            "sample_notices_for_manual_review": [
+                {
+                    "identifier": item.identifier[:100],
+                    "title": item.title[:160],
+                    "url": item.url,
+                    "published": item.published.isoformat() if item.published else None,
+                    "updated": item.updated.isoformat() if item.updated else None,
+                    "product": item.details.product,
+                    "brand": item.details.brand,
+                    "risk_type": item.details.risk_type,
+                    "batch_numbers": list(item.details.batch_numbers[:3]),
+                }
+                for item in notices[:2]
+            ],
+        })
     return result
 
 
