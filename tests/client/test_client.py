@@ -115,3 +115,26 @@ async def test_http_body_in_multiple_chunks() -> None:
     notices = await RecallClient(FakeSession(response)).async_get_notices()  # type: ignore[arg-type]
     assert len(notices) == 1
     assert notices[0].title == "Complete record"
+
+
+@pytest.mark.asyncio
+async def test_unexpected_redirect_is_refused_without_following_it() -> None:
+    """Official endpoints must not redirect requests to arbitrary hosts."""
+    response = FakeResponse(b"<html>Moved</html>")
+    response.status = 302
+    session = FakeSession(response)
+    with pytest.raises(RecallHTTPError, match="redirected"):
+        await RecallClient(session).async_get_notices()  # type: ignore[arg-type]
+    assert session.options["allow_redirects"] is False
+
+
+@pytest.mark.asyncio
+async def test_each_country_uses_non_redirecting_requests() -> None:
+    """No country adapter may silently follow an attacker-controlled 3xx target."""
+    for source in ("se_food", "ca_food", "ca_consumer", "uk_consumer"):
+        content = (b"<feed xmlns='http://www.w3.org/2005/Atom'><entry><title>Sample</title></entry></feed>"
+                   if source == "uk_consumer" else
+                   b"<rss><channel><item><title>Sample</title></item></channel></rss>")
+        session = FakeSession(FakeResponse(content))
+        await RecallClient(session, source).async_get_notices()  # type: ignore[arg-type]
+        assert session.options["allow_redirects"] is False
