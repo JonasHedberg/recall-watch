@@ -54,3 +54,33 @@ async def test_real_ha_config_entry_sensors_action_and_unload(hass) -> None:
         assert result["total"] == 1
         assert result["notices"][0]["title"] == "Sample recall notice"
         assert await hass.config_entries.async_unload(entry.entry_id)
+
+
+@pytest.mark.asyncio
+async def test_real_ha_config_flow_validation_and_duplicate_prevention(hass) -> None:
+    from homeassistant.data_entry_flow import FlowResultType
+
+    with patch("custom_components.recall_watch.config_flow.RecallClient", autospec=True) as client_cls:
+        client_cls.return_value.async_get_notices = AsyncMock(return_value=())
+        initial = await hass.config_entries.flow.async_init(DOMAIN, context={"source": "user"})
+        assert initial["type"] == FlowResultType.FORM
+
+        invalid = await hass.config_entries.flow.async_configure(
+            initial["flow_id"], user_input={"source": "se_food", "keywords": "x," * 21}
+        )
+        assert invalid["type"] == FlowResultType.FORM
+        assert invalid["errors"]["keywords"] == "invalid_keywords"
+
+        configured = await hass.config_entries.flow.async_configure(
+            initial["flow_id"], user_input={"source": "se_food", "keywords": "Coop"}
+        )
+        assert configured["type"] == FlowResultType.CREATE_ENTRY
+        assert configured["data"]["source"] == "se_food"
+        assert configured["options"]["keywords"] == "Coop"
+
+        next_flow = await hass.config_entries.flow.async_init(DOMAIN, context={"source": "user"})
+        duplicate = await hass.config_entries.flow.async_configure(
+            next_flow["flow_id"], user_input={"source": "se_food", "keywords": ""}
+        )
+        assert duplicate["type"] == FlowResultType.ABORT
+        assert duplicate["reason"] == "already_configured"
