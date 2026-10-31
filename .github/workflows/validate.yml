@@ -62,3 +62,29 @@ jobs:
           persist-credentials: false
       - name: Validate with hassfest
         uses: home-assistant/actions/hassfest@master
+  
+  live_sources:
+    name: Live publisher probes (release evidence, not automatic approval)
+    if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.14"
+      - name: Install probe dependencies
+        run: python -m pip install "aiohttp>=3.14.5,<4" "defusedxml==0.7.1"
+      - name: Probe live authority payloads
+        run: python scripts/live_source_probe.py --output /tmp/recall-watch-live-results.json
+      - name: Upload results for human review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: recall-watch-live-probes
+          path: /tmp/recall-watch-live-results.json
+          if-no-files-found: warn
