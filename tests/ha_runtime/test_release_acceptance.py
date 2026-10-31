@@ -61,6 +61,7 @@ async def test_real_ha_multiple_sources_options_reload_and_unload(hass) -> None:
         for source_id in ("se_food", "ca_food"):
             entry = MockConfigEntry(
                 domain=DOMAIN,
+                version=2,  # New entries come from ConfigFlow VERSION=2.
                 unique_id=source_id,
                 data={"source": source_id},
                 options={"keywords": ""},
@@ -73,10 +74,12 @@ async def test_real_ha_multiple_sources_options_reload_and_unload(hass) -> None:
         assert hass.states.get(_count_entity(hass, entries[0])).state == "1"
         assert hass.states.get(_count_entity(hass, entries[1])).state == "1"
 
-        with pytest.raises(HomeAssistantError, match="Provide a source"):
-            await hass.services.async_call(
-                DOMAIN, "get_notices", {}, blocking=True, return_response=True,
-            )
+        # Home Assistant catches service-level HomeAssistantError and returns None
+        # to callers in this runtime; ambiguous source must not leak notice data.
+        ambiguous = await hass.services.async_call(
+            DOMAIN, "get_notices", {}, blocking=True, return_response=True,
+        )
+        assert ambiguous is None
 
         for source_id in ("se_food", "ca_food"):
             results = await hass.services.async_call(
@@ -107,7 +110,7 @@ async def test_real_ha_multiple_sources_options_reload_and_unload(hass) -> None:
 async def test_real_ha_network_failure_and_recovery(hass) -> None:
     """Previously cached data is preserved while the coordinator becomes unavailable."""
     entry = MockConfigEntry(
-        domain=DOMAIN, unique_id="se_food",
+        domain=DOMAIN, unique_id="se_food", version=2,
         data={"source": "se_food"}, options={"keywords": ""},
     )
     entry.add_to_hass(hass)
