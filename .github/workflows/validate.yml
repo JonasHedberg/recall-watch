@@ -53,9 +53,19 @@ jobs:
 
   hassfest:
     name: Home Assistant hassfest
+    needs: [live_sources, ha_runtime]
+    if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
+      - name: Enforce live and native Home Assistant PR checks
+        if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
+        env:
+          LIVE_RESULT: ${{ needs.live_sources.result }}
+          HA_RESULT: ${{ needs.ha_runtime.result }}
+        run: |
+          test "$LIVE_RESULT" = "success"
+          test "$HA_RESULT" = "success"
       - name: Checkout
         uses: actions/checkout@v7
         with:
