@@ -127,7 +127,7 @@ def test_cpsc_optional_values_are_safely_ignored():
                   RecallDate=None, URL=42, Products=None, Hazards=None,
                   Description=42)
     result = parse_cpsc_recalls(json.dumps([record]).encode())[0]
-    assert result.details.product is None
+    assert result.details.product == "Example electric kettles"  # Explicit headline fallback
     assert result.published is None
     assert result.url is None
     assert result.identifier == record["Title"]
