@@ -1,16 +1,20 @@
 # Roadmap
 
-## Current candidate: 0.4.0b1 — International foundations
+## Release-readiness candidate — international sources
 
-Five selected official feeds for four national jurisdictions (Sweden, Canada, United Kingdom and United States). Separate source setup, per-source keyword filtering and six sensors, stable response-only action, English and Swedish messages, and backward migration for Swedish v0.2 entries. **Not production or release verified.**
+Six curated government feed adapters: European Union Safety Gate dangerous non-food alerts; Sweden food; Canada food and consumer; UK consumer; US CPSC consumer. The sources are not an exhaustive catalog of recall notices worldwide.
 
-## Next milestones
+Implemented: per-source setup and keyword filters, six sensors per source, bounded preview and paginated `get_notices` action, localized English/Swedish UI strings, coordinator polling, network/parse errors, conservative extraction, migration logic for Swedish v0.2.
 
-1. Real live-source adapter verification for every feed and response size, date parsing and terms.
-2. End-to-end Home Assistant 2026.10+ test matrix including Marketplace/HACS lifecycle.
-3. Review usability, translations and actual extraction accuracy on manually labelled recall notices.
-4. Investigate an official supported machine API/feed for EU Safety Gate. Add only after licensing, real fixtures and error handling are validated.
-5. Further countries when stable official interfaces exist and volunteer maintainers can test them.
-6. Optional historical recall tracking and event entity, subject to user-safety constraints.
+As of 2026-10-31, [PR #12](https://github.com/JonasHedberg/recall-watch/pull/12) contains offline regressions, live read/parse probes (all six sources) and a limited native Home Assistant smoke test. **It remains a draft, not a public-release approval.**
 
-No arbitrary-feed URLs, automated claims of household product safety, clinical guidance, or unverified country listings are planned.
+## Release milestones
+
+1. Resolve [release blocker #1](https://github.com/JonasHedberg/recall-watch/issues/1): real UI, install/upgrade, migration and failure-recovery acceptance.
+2. Manually compare representative data against original authority notice details; assess extraction errors and limits.
+3. Finish publisher rights/attribution/rate-limit review and evidence-signoff.
+4. Publish only after documented acceptance per [Release acceptance](RELEASE_ACCEPTANCE.md).
+5. Explore richer historical and model/batch-specific matching without implying confirmed household safety.
+6. Evaluate suitability for official Home Assistant Core separately: maintained PyPI client, native Core test conventions, quality-scale compliance and developer review.
+
+No arbitrary user-entered feed URLs, guaranteed safety ratings, or unchecked global recall coverage are planned.

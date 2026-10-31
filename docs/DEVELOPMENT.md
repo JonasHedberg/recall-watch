@@ -13,7 +13,7 @@ custom_components/recall_watch/
   entity.py           Unique IDs and common coordinator-backed entity behavior
   sensor.py           Count sensor, five latest-field sensors, max-five preview
   services.yaml       Action descriptions and selector forms
-  manifest.json       HACS-compatible package metadata; version 0.3.0b1
+  manifest.json       HACS-compatible package metadata; version 0.4.0b1
   translations/       English and Swedish setup, options and entity strings
   brand/              Integration-provided artwork
   _client/

@@ -1,58 +1,54 @@
-# Quality assurance report — International beta 0.4.0b1
+# Quality assurance report — Release-readiness candidate (2026-10-31)
 
-**Assessment date:** 24 October 2026
-**Classification:** Source package candidate — **NOT RELEASE-APPROVED**.
+**Candidate source:** `release-readiness-2026-10-31` / [draft PR #12](https://github.com/JonasHedberg/recall-watch/pull/12). **NOT RELEASE-APPROVED.** Existing published `v0.4.0b1` is an earlier unapproved beta; this PR does not change that tag.
 
-## Verified locally
+## Verified in GitHub Actions
 
-| Check | Result | Scope |
+| Verification | Recorded result | Limits |
 |---|---|---|
-| Offline automated tests | **77 passed** | RSS/Atom, CPSC JSON, normalized model, text enrichment, network error handling, country/source isolation, service stub contracts, migration, package metadata |
-| Client statement coverage | **475 / 486 = 97.7% (reported as 98%)** | `custom_components/recall_watch/_client/` **only**, includes Safety Gate; not Home Assistant runtime integration |
-| Syntax compilation | Passed | Custom component Python code |
-| Local repository validation | Passed | JSON, YAML, translation key parity, Markdown links and directory layout |
-| HACS multi-country metadata | Verified offline | No `country` restriction in `hacs.json` |
-| Release guard | **Expected failure** | Live-provider, Home Assistant runtime and independent release gates remain unverified |
+| Offline automated tests on Python 3.13 | **92 passed** | Synthetic fixtures and mocked component lifecycle, not a full HA installation |
+| Offline automated tests on Python 3.14 | **92 passed** | Same scope as above |
+| Real Home Assistant 2026.10.4 test API smoke | **2 passed** | Real integration framework; synthetic authority data; setup/unload, sensors/action and config flow checks |
+| HACS validator | Passed | Packaging and HACS consistency, not install/upgrade acceptance |
+| Home Assistant hassfest | Passed | Static metadata and schema validation |
+| Six live authority probes | **6/6 sources parsed** | Successful bounded HTTP reads and parsing, not accuracy/completeness certification |
+| Strict response-size bounds | 2 MiB per network response | Hard limit, not a completeness guarantee |
+| Release acceptance evidence | **BLOCKED** | A dated human acceptance record has not been supplied |
 
-Tests were run using Python 3.13.5. Mocked Home Assistant modules are **not** a substitute for genuine Core runtime tests. No GitHub release was published. GitHub source upload does not imply runtime validation.
+Reference: [GitHub Actions run 41184630659](https://github.com/JonasHedberg/recall-watch/actions/runs/41184630659), 31 October 2026; updated document review does not replace re-running the checks on the final exact commit.
 
-## Not tested or verified
+## Live source sample (2026-10-31)
 
-| Mandatory step | Status |
-|---|---|
-| Live EU Safety Gate index and report XML | **Blocked / not verified** |
-| Live Swedish Food Agency RSS | **Blocked / not verified** |
-| Live Canadian food/consumer RSS | **Blocked / not verified** |
-| Live GOV.UK OPSS Atom feed | **Blocked / not verified** |
-| Live US CPSC JSON API with 90-day filter | **Blocked / not verified** |
-| Stable source terms, rate limits and attribution permissions | **Needs maintainer review** |
-| Genuine Home Assistant 2026.10+/Python runtime config/options/sensors/service/migration/reload/unload | **Not run** |
-| Real-language UI review in English and Swedish | **Not run** |
-| GitHub Actions HACS Action and hassfest | **Not run** |
-| HACS/Marketplace manual install, upgrade, restore and uninstall | **Not run** |
-| Human-labeled extraction accuracy, completeness and false positives | **Not performed** |
-| Real GitHub owner and codeowners | **Configured:** `JonasHedberg` |
-| Published release URL | **Not created** |
-| EU Safety Gate machine interface | **Not implemented** |
+| Source | Parsed notices | Example metadata checked by parser |
+|---|---:|---|
+| EU Safety Gate | 157 | Report/alert ID, alert URL, product, risk and report date |
+| Swedish Food Agency | 2 | Recall headline, source link, product and risk |
+| Canadian food | 3 | Food/allergen headline, product and publisher ID |
+| Canadian consumer | 3 | Consumer product headline and hazard terms |
+| United Kingdom | 50 | GOV.UK Atom publication date, title and product |
+| US CPSC | 191 | Recall/update dates, structured product and original link |
 
-## Fail-closed behaviors
+All source counts reflect a *limited current response*, never all active notices or all markets. Sources can be incomplete; an empty result is never proof of a product's safety. Live probes retain two bounded example records per source in the CI artifact for manual comparison.
 
-- Unsupported source IDs are rejected; Home Assistant configuration cannot supply arbitrary URLs.
-- Invalid, oversized or excessive-entry RSS/JSON responses fail rather than silently reporting a safe state.
-- CPSC requests are restricted to a recent 90-day update window to limit payload size, not to claim full historical coverage.
-- Nonexistent brand/batch fields remain unknown; company names are not treated as brands.
-- Multiple source entries remain independent, including when a source is removed.
-- A response-only action without a source is rejected if multiple sources are installed.
+## Changes reviewed
 
-## Commands for maintainers
+- Corrected `aiohttp` stream reading to EOF with 2 MiB cap and tests for split reads.
+- EU selector source registry parity and pagination up to 500.
+- US CPSC last-update ordering with original recall date retained.
+- Conservative Swedish/English headlines and allergen/hazard recognition; unknown brands remain unknown.
+- English and Swedish JSON locale keys present and parity-checked.
+- Fail-closed evidence checker and source licence/attribution research.
 
-```sh
-python -m pip install -r requirements-dev.txt
-python -m pytest -q
-coverage run --source=custom_components/recall_watch/_client -m pytest -q
-coverage report -m
-python scripts/validate_repository.py
-python scripts/pre_release_check.py
-```
+## NOT verified / mandatory before public release
 
-The last command may deliberately fail until live-provider and runtime release gates are documented. Repository ownership is configured, but this does not prove runtime or provider compatibility. Do not issue a stable or public beta release without reviewing [the release checklist](RELEASE_CHECKLIST.md) and [live-test matrix](LIVE_TEST_MATRIX.md).
+- [ ] Real Home Assistant installed on user hardware/VM: six sources, options/reload, timeouts/outages/recovery, migration, recorder behavior and restart.
+- [ ] Manual English and Swedish actual frontend UI review, plus HACS/Marketplace install, upgrade, backup and uninstall.
+- [ ] Representative human-labeled notices from **all six sources** compared to original authority product/brand, date, batch, hazard, case ID and jurisdiction, including withdrawn/corrected notices.
+- [ ] Publisher-specific reuse, attribution and rate-limit review signed by a human maintainer.
+- [ ] Human review of accepted version and release notes, including correct prerelease classification of `v0.4.0b1`.
+- [ ] `docs/release-evidence.json` with dated evidence links and all gates completed, passing `python scripts/verify_release_evidence.py`.
+- [ ] Review final exact revision CI after PR changes and verify published release via clean installation.
+
+No client-wide statement coverage was measured for this exact PR; earlier coverage figures from `2026-10-24` must not be cited for the new code.
+
+See [Release acceptance](RELEASE_ACCEPTANCE.md), [live acceptance matrix](LIVE_TEST_MATRIX.md), [source reuse research](SOURCE_REUSE_REVIEW.md), and [issue #1](https://github.com/JonasHedberg/recall-watch/issues/1).

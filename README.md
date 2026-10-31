@@ -1,6 +1,6 @@
 # Recall Watch — International product recall monitoring for Home Assistant
 
-> **0.4.0b1 — UNRELEASED BETA CANDIDATE. Not validated in a real Home Assistant runtime or against current production feed payloads.** This is a third-party Home Assistant integration, not an official Home Assistant Core integration, an official government service, or a substitute for checking authoritative safety notices. Do **not** publish a release until [every release gate](docs/RELEASE_ACCEPTANCE.md) is cleared.
+> **Release-readiness draft for the next beta — NOT APPROVED FOR PUBLIC RELEASE.** The existing published `v0.4.0b1` is not the corrected PR version. Automated live reads and limited native Home Assistant tests have now passed, but human approval remains incomplete. This is a third-party Home Assistant integration, not an official Home Assistant Core integration, an official government service, or a substitute for checking authoritative safety notices. Do **not** publish a release until [every release gate](docs/RELEASE_ACCEPTANCE.md) is cleared.
 
 Recall Watch surfaces official recall notices as Home Assistant sensors and a response-only action. Choose one or more supported country-specific sources. Each configured source is independent, with its own keyword filter, coordinator and entity set. The integration never uploads keyword lists to a Recall Watch server; queries use only fixed government endpoints.
 
@@ -35,7 +35,7 @@ Official-source references and exact fixed URLs are documented in [DATA_SOURCES.
 
 ## Installation
 
-The project source is available at [JonasHedberg/recall-watch](https://github.com/JonasHedberg/recall-watch). This is an **unreleased beta candidate**; before installing as a custom repository, review the release limitations:
+The project source is available at [JonasHedberg/recall-watch](https://github.com/JonasHedberg/recall-watch). The current development branch is an **unapproved release candidate**; the previously published `v0.4.0b1` is older and has not satisfied the full acceptance process. Review these limitations before testing:
 
 1. Make a backup of your Home Assistant configuration.
 2. On Home Assistant 2026.10 or earlier, in HACS add `JonasHedberg/recall-watch` as a **Custom repository → Integration**, once a tested HACS release is available. On Home Assistant 2026.11+, use the built-in **Marketplace** with its custom repository option.
@@ -95,10 +95,10 @@ All code, repository documents and canonical keys are English. UI messages are s
 - Recall Watch makes outbound HTTPS requests to the fixed publisher websites; publishers may see the requesting host's IP address. No cloud account or API key is required in this release.
 - RSS feeds can omit records or remove older entries, authorities may update notices after publication, and the CPSC source intentionally limits requests to the most recently updated 90 days. Polling every six hours is **not** a real-time alert guarantee.
 - Brand, batch and risk information may be missing, misleading or falsely identified in unstructured text; a product in one country does not imply availability in another.
-- The EU, UK, Canadian, Swedish and US source adapters have **offline fixtures only** here; live network and runtime acceptance remain blocked in [QA_REPORT.md](docs/QA_REPORT.md).
+- Six live source adapters now pass bounded fetch-and-parse CI probes and the basic native Home Assistant runtime smoke tests pass. However, **real user-installation and human notice-accuracy acceptance are not yet complete**; see [QA_REPORT.md](docs/QA_REPORT.md).
 - Recall Watch is not endorsed by Home Assistant, any public agency or government.
 
-Read [DATA_EXTRACTION.md](docs/DATA_EXTRACTION.md), [SECURITY_AND_PRIVACY.md](docs/SECURITY_AND_PRIVACY.md) and [DATA_SOURCES.md](docs/DATA_SOURCES.md) before relying on the integration.
+Read [DATA_EXTRACTION.md](docs/DATA_EXTRACTION.md), [SECURITY_AND_PRIVACY.md](docs/SECURITY_AND_PRIVACY.md), [DATA_SOURCES.md](docs/DATA_SOURCES.md) and [SOURCE_REUSE_REVIEW.md](docs/SOURCE_REUSE_REVIEW.md) before relying on the integration.
 
 ## Contribute and maintain
 
