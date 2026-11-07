@@ -43,8 +43,6 @@ The project source is available at [JonasHedberg/recall-watch](https://github.co
 4. Follow the configuration flow under **Settings → Devices & services → Add integration → Recall Watch**. Select an official source and optionally supply up to 20 comma-separated search phrases (maximum 64 characters each).
 5. Repeat configuration to monitor more countries or categories. Only one configuration entry per source is supported.
 
-For developer testing before a release, check out the exact candidate SHA, copy `custom_components/recall_watch/` into the Home Assistant configuration folder, and restart. This manual fallback is **not** a Marketplace install or an acceptance sign-off.
-
 Previously installed Swedish v0.2 entries are migrated to `se_food`; entity-based unique IDs are retained. **Back up before upgrading, and verify historical entities after restart.**
 
 See [Marketplace installation](docs/MARKETPLACE_INSTALLATION.md) and [GitHub setup](docs/GITHUB_SETUP.md).
