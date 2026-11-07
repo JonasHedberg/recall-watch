@@ -93,7 +93,7 @@ jobs:
         run: python scripts/live_source_probe.py --output /tmp/recall-watch-live-results.json
       - name: Upload results for human review
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: recall-watch-live-probes
           path: /tmp/recall-watch-live-results.json
