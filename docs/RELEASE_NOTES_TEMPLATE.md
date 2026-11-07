@@ -32,4 +32,4 @@ Recall data and extracted fields are **best effort**. Users must check original 
 
 ## Upgrade and rollback
 
-Back up Home Assistant configuration, install from Marketplace or manually, restart as requested and verify entities and action outputs. Provide a rollback plan for affected users.
+Back up Home Assistant configuration, install or update exclusively through Home Assistant Marketplace, restart as requested and verify entities and action outputs. Provide a rollback plan for affected users.
