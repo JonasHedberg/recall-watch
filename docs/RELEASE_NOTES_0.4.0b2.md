@@ -9,10 +9,12 @@ This beta updates the international recall monitoring integration for Home Assis
 ## Fixes and enhancements
 
 - Official feed requests now consume complete responses under a strict limit and reject unapproved HTTP redirects.
+- Populated feeds whose entries are all unusable now fail safely rather than showing zero notices; malformed publisher links are discarded without crashing an otherwise valid feed.
 - The `recall_watch.get_notices` action supports all six configured sources and offsets through 500 within its cached bounded feed.
 - CPSC exposes separate original recall and last-update timestamps; recently updated older recalls are no longer buried by original date.
 - More careful English/Swedish/Canadian product name extraction, explicit allergen and fire/burn signals, plus English/Swedish fall hazard state.
 - Source-aware configuration, keyword matching, six sensors per source and migration from older Swedish settings remain supported.
+- Release acceptance explicitly requires the Marketplace install/update/rollback/uninstall workflow; no separate community-store dependency is needed.
 
 ## Compatibility and installation
 
