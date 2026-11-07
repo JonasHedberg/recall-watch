@@ -11,7 +11,7 @@ from unittest.mock import AsyncMock, patch
 import pytest
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import entity_registry as er
-from pytest_homeassistant_custom_component.common import MockConfigEntry
+from pytest_homeassistant.common import MockConfigEntry
 
 from custom_components.recall_watch._client import (
     SOURCES, RecallConnectionError, parse_recall_feed,

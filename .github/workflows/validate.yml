@@ -1,4 +1,4 @@
-name: HACS and Home Assistant validation
+name: Marketplace and Home Assistant validation
 
 on:
   push:
@@ -37,23 +37,27 @@ jobs:
       - name: Compile source
         run: python -m compileall -q custom_components/recall_watch
 
-  hacs:
-    name: HACS validator
+  marketplace:
+    name: Marketplace repository validation
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 15
     steps:
       - name: Checkout
         uses: actions/checkout@v7
         with:
           persist-credentials: false
-      - name: Validate with HACS
-        uses: hacs/action@main
+      - name: Python
+        uses: actions/setup-python@v7
         with:
-          category: integration
+          python-version: "3.14"
+      - name: Install structural validator
+        run: python -m pip install "PyYAML>=6.0,<7"
+      - name: Verify Marketplace package contract
+        run: python scripts/validate_marketplace.py
 
   hassfest:
     name: Home Assistant hassfest
-    needs: [live_sources, ha_runtime]
+    needs: [live_sources, ha_runtime, marketplace]
     if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -63,9 +67,11 @@ jobs:
         env:
           LIVE_RESULT: ${{ needs.live_sources.result }}
           HA_RESULT: ${{ needs.ha_runtime.result }}
+          MARKETPLACE_RESULT: ${{ needs.marketplace.result }}
         run: |
           test "$LIVE_RESULT" = "success"
           test "$HA_RESULT" = "success"
+          test "$MARKETPLACE_RESULT" = "success"
       - name: Checkout
         uses: actions/checkout@v7
         with:
@@ -100,14 +106,10 @@ jobs:
           if-no-files-found: warn
 
   ha_runtime:
-    name: Real Home Assistant runtime smoke (HA ${{ matrix.ha_version }})
+    name: Home Assistant 2026.11 runtime tests
     if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 25
-    strategy:
-      fail-fast: false
-      matrix:
-        ha_version: ["2026.10.4", "2026.11.0"]
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -117,7 +119,9 @@ jobs:
         uses: actions/setup-python@v7
         with:
           python-version: "3.14"
-      - name: Install Home Assistant and runtime test harness
-        run: python -m pip install "homeassistant==${{ matrix.ha_version }}" "pytest-homeassistant-custom-component" "defusedxml==0.7.1"
+      - name: Install Home Assistant 2026.11 and official test harness
+        run: |
+          python -m pip install "homeassistant==2026.11.0" "pytest-homeassistant @ https://github.com/home-assistant/core/archive/refs/tags/2026.11.0.tar.gz#subdirectory=packages/pytest-homeassistant" "defusedxml==0.7.1"
+          python -m pip check
       - name: Run integration tests against actual HA APIs
         run: python -m pytest tests/ha_runtime -q

@@ -1,22 +1,17 @@
 """Exercise configuration, sensors, and the action with genuine Home Assistant fixtures.
 
 Unlike the repository's mocked-contract tests, this suite loads real HA APIs.
-Run separately with pytest-homeassistant-custom-component.
+Run with the first-party Home Assistant pytest package.
 """
 from __future__ import annotations
 
 from unittest.mock import AsyncMock, patch
 
 import pytest
-from pytest_homeassistant_custom_component.common import MockConfigEntry
+from pytest_homeassistant.common import MockConfigEntry
 
 from custom_components.recall_watch._client import SOURCES, parse_recall_feed
 from custom_components.recall_watch.const import DOMAIN
-
-
-@pytest.fixture(autouse=True)
-def enable_custom_components(enable_custom_integrations) -> None:
-    """Use the real HA integration loader."""
 
 
 @pytest.mark.asyncio
