@@ -6,7 +6,7 @@ Recall Watch targets **Home Assistant 2026.11.0 and later** and is currently bei
 
 1. Open **Settings → Marketplace** and accept the Marketplace safety notice if this is your first use.
 2. Select **Add from link**, sign in to GitHub if requested, and add `https://github.com/JonasHedberg/recall-watch`.
-3. Open Recall Watch and install a published, accepted version. A candidate branch is not a published release.
+3. Open Recall Watch and install a published, accepted version. For an explicitly offered beta, enable the **Pre-release** entity/switch under **Settings → Devices & services → Marketplace** first. A candidate branch is not itself a published release.
 4. Add Recall Watch under **Settings → Devices & services** and choose one of its official sources. Repeat setup for each additional source.
 5. The Marketplace can load integrations with configuration flows directly; follow any restart or repair instructions shown after an update.
 
