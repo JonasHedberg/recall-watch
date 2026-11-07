@@ -9,7 +9,7 @@ Recall Watch is a **third-party Marketplace integration**, not a bundled Core in
 3. Follow [Manual Marketplace acceptance](MANUAL_HA_ACCEPTANCE.md) in a real Home Assistant 2026.11 installation and capture actual English/Swedish screenshots and install/update/rollback/uninstall results.
 4. Compare representative notices from all six publishers with original records, including dates, case IDs, alerts versus recalls, affected markets, models, batches and withdrawn/corrected notices.
 5. Review publisher licence, attribution and request-rate obligations; record a named, dated maintainer approval.
-6. Complete the [release acceptance](RELEASE_ACCEPTANCE.md) file `docs/release-evidence.json`; `python scripts/verify_release_evidence.py` must pass. Do not fabricate acceptance.
+6. Complete the [release acceptance](RELEASE_ACCEPTANCE.md) file `docs/release-evidence.json`; `python scripts/verify_release_evidence.py --expected-commit <SHA>` must pass with `reviewed_commit` equal to the exact accepted revision. The optional manual **Release preflight** GitHub Actions workflow also checks that SHA; do not fabricate acceptance.
 7. Confirm all applicable GitHub branch status checks are green at the exact accepted commit and no critical open security findings remain.
 
 ## Release versioning
