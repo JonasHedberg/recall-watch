@@ -2,14 +2,14 @@
 
 **Reviewed:** 7 November 2026. **Status: code/automated verification passed; public release acceptance NOT YET complete.** Proposed source is [draft PR #16](https://github.com/JonasHedberg/recall-watch/pull/16), not the older published `v0.4.0b1`.
 
-## Latest full CI
+## Recent full CI evidence
 
-Evidence: [GitHub Actions run 42362105080](https://github.com/JonasHedberg/recall-watch/actions/runs/42362105080).
+The expanded regression suite and native Home Assistant tests passed in [Actions run 42363403658](https://github.com/JonasHedberg/recall-watch/actions/runs/42363403658). Before release, recheck all required jobs at the **final exact candidate commit**.
 
 | Check | Result | What the result proves |
 |---|---|---|
-| Offline tests on Python 3.13 | **98 passed** | Isolated parsers, packaging, metadata and mocked contracts |
-| Offline tests on Python 3.14 | **98 passed** | The same regression suite on the HA runtime Python |
+| Offline tests on Python 3.13 | **102 passed** | Isolated parsers, packaging, metadata and mocked contracts |
+| Offline tests on Python 3.14 | **102 passed** | The same regression suite on the HA runtime Python |
 | Home Assistant **2026.11.0** native tests | **6 passed** | Real Home Assistant APIs with synthetic authority responses |
 | Marketplace repository validation | **Passed** | Metadata, branding, source structure, relative links and HA version contract |
 | Home Assistant hassfest | **Passed** | Static integration metadata checks |
@@ -34,7 +34,9 @@ The earlier 7 November probe failed when Safety Gate returned HTTP 500. A subseq
 - Kept the mandatory Marketplace metadata filename `hacs.json` (the platform requires it); removed obsolete installation paths, validation actions and publication guides.
 - Explicit risk parsing for Canadian **flammability** and **fall/entrapment**, with English and Swedish enum labels.
 - Existing corrections to complete bounded HTTP reads, redirect restrictions, EU action source selection and pagination, US CPSC update sorting, options and source separation remain tested.
-- Added strict evidence-version consistency for `v0.4.0b2`.
+- Added strict evidence-version consistency for `v0.4.0b2` and explicitly replaced the legacy installation acceptance gate with Marketplace install/update/rollback/uninstall requirements.
+- Populated RSS, Atom and CPSC responses with no usable records now fail closed rather than presenting misleading zero results; invalid publisher URLs are rejected without crashing valid feeds.
+- Removed the obsolete no-op CI workflow and made hassfest dependent on successful offline and Marketplace validation checks.
 
 ## Remaining release acceptance
 
