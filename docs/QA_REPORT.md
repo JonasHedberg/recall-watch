@@ -4,12 +4,12 @@
 
 ## Recent full CI evidence
 
-The expanded regression suite and native Home Assistant tests passed in [Actions run 42378433794](https://github.com/JonasHedberg/recall-watch/actions/runs/42378433794). Before release, recheck all required jobs at the **final exact candidate commit**.
+The expanded regression suite and latest feed-review instrumentation are checked in [Actions run 42378906542](https://github.com/JonasHedberg/recall-watch/actions/runs/42378906542). Before release, confirm all jobs have passed at the **final exact candidate commit**.
 
 | Check | Result | What the result proves |
 |---|---|---|
-| Offline tests on Python 3.13 | **103 passed** | Isolated parsers, packaging, metadata and mocked contracts |
-| Offline tests on Python 3.14 | **103 passed** | The same regression suite on the HA runtime Python |
+| Offline tests on Python 3.13 | **106 passed** | Isolated parsers, packaging, metadata and mocked contracts |
+| Offline tests on Python 3.14 | **106 passed** | The same regression suite on the HA runtime Python |
 | Home Assistant **2026.11.0** native tests | **6 passed** | Real Home Assistant APIs with synthetic authority responses |
 | Marketplace repository validation | **Passed** | Metadata, branding, source structure, relative links and HA version contract |
 | Home Assistant hassfest | **Passed** | Static integration metadata checks |
@@ -37,7 +37,8 @@ The earlier 7 November probe failed when Safety Gate returned HTTP 500. A subseq
 - Added strict evidence-version consistency for `v0.4.0b2` and explicitly replaced the legacy installation acceptance gate with Marketplace install/update/rollback/uninstall requirements.
 - Populated RSS, Atom and CPSC responses with no usable records now fail closed rather than presenting misleading zero results; invalid publisher URLs are rejected without crashing valid feeds.
 - Removed the obsolete no-op CI workflow and made hassfest dependent on successful offline and Marketplace validation checks.
-- Added a separate, manually triggered **Release preflight** to check genuine review evidence, reviewed commit ancestry, no changes after review apart from the evidence file, plus offline, native Home Assistant, live-feed and hassfest checks. This preflight cannot pass until real approval evidence is committed; it does not itself publish a release.
+- Added a separate, manually triggered **Release preflight** to check genuine review evidence, reviewed commit ancestry, no changes after review apart from the evidence file, plus offline, native Home Assistant, live-feed and hassfest checks.
+- Publisher-probe artifacts now include up to twelve *candidate* source notices per source, stratified across older/recent notices and explicit risks, modifications and batch fields. This does **not** satisfy manual source accuracy approval. This preflight cannot pass until real approval evidence is committed; it does not itself publish a release.
 
 ## Remaining release acceptance
 
