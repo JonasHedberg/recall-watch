@@ -16,9 +16,8 @@ This beta updates the international recall monitoring integration for Home Assis
 
 ## Compatibility and installation
 
-- Proposed minimum Home Assistant version: **2026.10.0**.
-- Automated CI target: **Home Assistant 2026.10.4 and 2026.11.0**, Python 3.14.
-- Home Assistant 2026.10: add the integration repository via HACS.
+- Minimum Home Assistant version: **2026.11.0**.
+- Automated CI target: **Home Assistant 2026.11.0**, Python 3.14.
 - Home Assistant 2026.11+: **Settings → Marketplace → Add from link**, using `https://github.com/JonasHedberg/recall-watch`.
 - An existing `v0.4.0b1` installation should be backed up prior to opting into this new beta. Test migration and rollback in a test Home Assistant instance first.
 
@@ -32,10 +31,10 @@ This beta updates the international recall monitoring integration for Home Assis
 
 ## Tests and approvals
 
-Automated parser, HA-API and upstream live-probe checks must pass at the precise release revision. Independent original-notice comparison, installed English/Swedish UI acceptance, HACS/Marketplace install/update, security and source reuse review must also be completed by the maintainer before changing this document from draft.
+Automated parser, HA-API and upstream live-probe checks must pass at the precise release revision. Independent original-notice comparison, installed English/Swedish UI acceptance, Marketplace install/update, security and source reuse review must also be completed by the maintainer before changing this document from draft.
 
 See [QA report](QA_REPORT.md), [release acceptance](RELEASE_ACCEPTANCE.md), [manual HA test plan](MANUAL_HA_ACCEPTANCE.md) and [release evidence template](release-evidence.example.json).
 
 ## Rollback
 
-Make a full Home Assistant configuration backup. Revert to an earlier installed integration version in HACS/Marketplace or restore the backup, restart and verify six sensors per source plus the `get_notices` action.
+Make a full Home Assistant configuration backup. Revert to an earlier installed integration version in Marketplace or restore the backup, restart and verify six sensors per source plus the `get_notices` action.

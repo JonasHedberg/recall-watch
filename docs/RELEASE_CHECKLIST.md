@@ -10,8 +10,8 @@
 - [x] CPSC update-aware ordering, preserving original recall date; regression tests.
 - [x] Conservative product/risk extraction improvements based on inspected live examples; regression tests.
 - [x] 95 offline tests on each of Python 3.13 and 3.14 (2026-10-31).
-- [x] 6 genuine Home Assistant 2026.10.4 framework tests for setup/config/action/unload, two source isolation, options, outage/recovery, migration and locale loading (2026-10-31).
-- [x] Passing HACS and Home Assistant hassfest validators (2026-10-31).
+- [x] 6 genuine Home Assistant 2026.11.0 framework tests for setup/config/action/unload, two source isolation, options, outage/recovery, migration and locale loading (2026-10-31).
+- [x] Passing Marketplace validation and Home Assistant hassfest required.
 - [x] Six publisher endpoints successfully fetched and parsed by a bounded live CI probe (2026-10-31).
 - [x] English and Swedish locale key parity; translated actual frontend remains unchecked.
 - [x] Preliminary publisher reuse research recorded in [Source reuse review](SOURCE_REUSE_REVIEW.md).
@@ -20,8 +20,8 @@
 
 - [ ] Complete representative original-notice accuracy assessment, especially EU detail records and corrected/withdrawn notices; [ten independent spot checks](AUTHORITY_SAMPLE_AUDIT.md) completed but do not meet full acceptance.
 - [ ] Test all six sources in an actual Home Assistant installation, user-facing English and Swedish UI, migration, restart, reconfiguration, outage and stale-state recovery.
-- [ ] Pass native Home Assistant CI against both 2026.10.4 and 2026.11.0, and verify Marketplace compatibility under 2026.11.
-- [ ] Confirm HACS/Marketplace install/upgrade/uninstall from the proposed release.
+- [x] Native Home Assistant 2026.11.0 tests pass via the first-party test package (2026-11-07); actual Marketplace UI installation still requires acceptance.
+- [ ] Confirm Marketplace install/upgrade/uninstall from the proposed release.
 - [ ] Confirm the publisher's specific reuse terms, logo/trademark rights, licence/attribution and responsible polling with a human maintainer.
 - [ ] Reclassify or withdraw prior published `v0.4.0b1` as an unapproved beta; do not modify an existing tag's history.
 - [ ] Human review and timestamped release evidence linked to GitHub artifacts/source comparisons.

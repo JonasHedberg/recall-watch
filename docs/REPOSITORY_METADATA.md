@@ -6,7 +6,7 @@ The public repository is [JonasHedberg/recall-watch](https://github.com/JonasHed
 | --- | --- |
 | Repository | `recall-watch` |
 | Owner | `JonasHedberg` |
-| Visibility | **Public** (required by HACS/Marketplace) |
+| Visibility | **Public** (required by Marketplace) |
 | Default branch | `main` |
 | Description | `International product recall monitoring for Home Assistant: Sweden, Canada, United Kingdom and United States.` |
 | Website | Leave blank until a real project site exists; do not enter an invented URL |
@@ -16,7 +16,7 @@ The public repository is [JonasHedberg/recall-watch](https://github.com/JonasHed
 | Private vulnerability reporting | Enabled |
 | First candidate version | `0.4.0b1` — GitHub pre-release **only after release gates pass** |
 
-Recommended topics: `home-assistant`, `homeassistant`, `hacs`, `custom-integration`, `food-safety`, `product-recalls`, `sweden`, `canada`, `united-kingdom`, `united-states`, `python`.
+Recommended topics: `home-assistant`, `homeassistant`, `marketplace`, `custom-integration`, `food-safety`, `product-recalls`, `sweden`, `canada`, `united-kingdom`, `united-states`, `python`.
 
 **Suggested About tagline:** `Unofficial international recall monitoring for Home Assistant.`
 

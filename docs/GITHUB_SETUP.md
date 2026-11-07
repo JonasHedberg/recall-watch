@@ -1,6 +1,6 @@
 # GitHub repository setup (maintainer runbook)
 
-**This repository must be public to work with HACS and Home Assistant Marketplace.** See [HACS general requirements](https://hacs.dev/docs/publish/start/) and [Marketplace repository structure](https://contributors.home-assistant.io/marketplace/reference/repository-structure/).
+**This repository must be public to work with Home Assistant Marketplace.** See [Marketplace repository structure](https://contributors.home-assistant.io/marketplace/reference/repository-structure/).
 
 The public repository already exists at [JonasHedberg/recall-watch](https://github.com/JonasHedberg/recall-watch). Its initial source tree is a beta candidate, **not a public release**. The instructions below also describe how to set up a fork or other account.
 
@@ -12,7 +12,7 @@ The public repository already exists at [JonasHedberg/recall-watch](https://gith
 4. Do **not** initialize with another README, license or `.gitignore`; they are included already.
 5. After creation, enable **Issues** and **Actions**. Optionally enable Discussions.
 6. Description: `International product recall monitoring for Home Assistant: Sweden, Canada, United Kingdom and United States.`
-7. Topics: `home-assistant`, `homeassistant`, `hacs`, `custom-integration`, `food-safety`, `product-recalls`, `sweden`, `canada`, `united-kingdom`, `united-states`, `python`.
+7. Topics: `home-assistant`, `homeassistant`, `marketplace`, `custom-integration`, `food-safety`, `product-recalls`, `sweden`, `canada`, `united-kingdom`, `united-states`, `python`.
 8. Under repository **Settings → Security and quality → Advanced Security**, enable **Private vulnerability reporting**. The exact labels can change.
 
 ## 2. Apply owner-specific metadata
@@ -46,13 +46,13 @@ If the ZIP was extracted inside another Git repository, run these commands in a 
 - Enable Dependabot alerts and update pull requests where available.
 - Confirm `README.md`, license, contribution and security policies appear under GitHub's community standards.
 - Run and inspect the `Check integration` workflow after the first push. Fix all errors, including Home Assistant brands/manifest warnings.
-- Do not claim HACS catalog approval merely because the repository is public.
+- Do not claim Marketplace catalog inclusion merely because the repository is public.
 
 ## 5. Brand assets and catalog
 
-HACS documentation requires an appropriate entry in [home-assistant/brands](https://github.com/home-assistant/brands); files under `custom_components/recall_watch/brand/` alone do **not** satisfy that requirement. Follow current brand instructions and complete review externally before seeking default-catalog inclusion.
+Home Assistant branding guidelines recommend an appropriate entry in [home-assistant/brands](https://github.com/home-assistant/brands); files under `custom_components/recall_watch/brand/` alone do **not** satisfy that requirement. Follow current brand instructions and complete review externally before seeking default-catalog inclusion.
 
-See [Release process](RELEASE_PROCESS.md), [HACS / Marketplace](HACS_MARKETPLACE.md) and [Release checklist](RELEASE_CHECKLIST.md). The initial beta is intended for a **custom repository**, not a default-catalog submission while used primarily as a candidate for Home Assistant Core.
+See [Release process](RELEASE_PROCESS.md), [Marketplace installation](MARKETPLACE_INSTALLATION.md) and [Release checklist](RELEASE_CHECKLIST.md). The initial beta is intended for a **custom Marketplace repository**, not a default-catalog submission until publisher acceptance.
 
 
 ## Updating an existing public repository

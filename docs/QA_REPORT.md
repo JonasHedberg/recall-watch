@@ -8,8 +8,8 @@
 |---|---|---|
 | Offline automated tests on Python 3.13 | **95 passed** | Synthetic fixtures and mocked component lifecycle, not a full HA installation |
 | Offline automated tests on Python 3.14 | **95 passed** | Same scope as above |
-| Real Home Assistant 2026.10.4 test API smoke | **6 passed** | Real framework, synthetic source responses; includes source isolation, configuration/options, coordinator outage recovery, migration and translations |
-| HACS validator | Passed | Packaging and HACS consistency, not install/upgrade acceptance |
+| Real Home Assistant 2026.11.0 test API smoke | **6 passed** | Real framework, synthetic source responses; includes source isolation, configuration/options, coordinator outage recovery, migration and translations |
+| Marketplace repository validator | Validated in CI | Repository structure and metadata, not actual GUI installation |
 | Home Assistant hassfest | Passed | Static metadata and schema validation |
 | Six live authority probes | **6/6 sources parsed** | Successful bounded HTTP reads and parsing, not accuracy/completeness certification |
 | Strict response-size bounds | 2 MiB per network response | Hard limit, not a completeness guarantee |
@@ -41,8 +41,8 @@ All source counts reflect a *limited current response*, never all active notices
 
 ## NOT verified / mandatory before public release
 
-- [ ] Real Home Assistant installation on maintainer hardware/VM: browser/UI, recorder behavior, restart and actual HACS installation (native automated tests cover only the simulated runtime environment).
-- [ ] Manual English and Swedish actual frontend UI review, plus HACS/Marketplace install, upgrade, backup and uninstall.
+- [ ] Real Home Assistant installation on maintainer hardware/VM: browser/UI, recorder behavior, restart and actual Marketplace installation (native automated tests cover only the simulated runtime environment).
+- [ ] Manual English and Swedish actual frontend UI review, plus Marketplace install, upgrade, backup and uninstall.
 - [ ] Representative human-labeled notices from **all six sources** compared to original authority product/brand, date, batch, hazard, case ID and jurisdiction, including withdrawn/corrected notices.
 - [ ] Publisher-specific reuse, attribution and rate-limit review signed by a human maintainer.
 - [ ] Human review of accepted version and release notes, including correct prerelease classification of `v0.4.0b1`.
