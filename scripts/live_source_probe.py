@@ -14,6 +14,38 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "custom_components"
 from _client import RecallClient, SOURCES
 
 
+def choose_review_samples(notices: tuple, *, limit: int = 12) -> list:
+    """Provide diverse, bounded candidates for *human* publisher comparison.
+
+    These are not verified matches. Include earliest and latest records, varied
+    hazards, amended notices and explicitly extracted batches when available.
+    """
+    selected = []
+    seen = set()
+
+    def add(notice):
+        if notice.identifier not in seen and len(selected) < limit:
+            selected.append(notice)
+            seen.add(notice.identifier)
+
+    for notice in notices[:2]:
+        add(notice)
+    for notice in notices[-2:]:
+        add(notice)
+    hazards = set()
+    for notice in notices:
+        hazard = notice.details.risk_type
+        if hazard not in hazards:
+            add(notice)
+            hazards.add(hazard)
+    for notice in notices:
+        if notice.updated and notice.updated != notice.published:
+            add(notice)
+        if notice.details.batch_numbers or notice.details.best_before_dates:
+            add(notice)
+    return selected[:limit]
+
+
 async def check_source(session: aiohttp.ClientSession, source_id: str) -> dict:
     result = {"source": source_id, "checked_at": datetime.now(timezone.utc).isoformat(),
               "status": "failed", "record_count": 0}
@@ -51,13 +83,17 @@ async def check_source(session: aiohttp.ClientSession, source_id: str) -> dict:
         except Exception as diagnostic_error:
             result["diagnostic_error"] = type(diagnostic_error).__name__
     else:
+        samples = choose_review_samples(notices)
         result.update({
             "status": "parsed",
             "record_count": len(notices),
+            "audit_sample_count": len(samples),
+            "audit_sample_policy": "first/last, distinct hazards, updates, explicit batches (max 12)",
             "sample_notices_for_manual_review": [
                 {
                     "identifier": item.identifier[:100],
                     "title": item.title[:160],
+                    "summary_excerpt": item.summary[:250],
                     "url": item.url,
                     "published": item.published.isoformat() if item.published else None,
                     "updated": item.updated.isoformat() if item.updated else None,
@@ -65,8 +101,9 @@ async def check_source(session: aiohttp.ClientSession, source_id: str) -> dict:
                     "brand": item.details.brand,
                     "risk_type": item.details.risk_type,
                     "batch_numbers": list(item.details.batch_numbers[:3]),
+                    "best_before_dates": list(item.details.best_before_dates[:3]),
                 }
-                for item in notices[:2]
+                for item in samples
             ],
         })
     return result
