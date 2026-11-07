@@ -164,3 +164,20 @@ def test_brand_name_without_delimiter_not_brand() -> None:
 def test_english_undeclared_allergen_and_fire_burn() -> None:
     assert extract_recall_details("DREO Space Heaters recalled due to fire and burn hazards", "").risk_type == "multiple"
     assert extract_recall_details("Sunchanggung 990 Ssamjang recalled due to undeclared sesame", "").risk_type == "allergen"
+
+
+def test_live_canadian_flammability_hazard() -> None:
+    """Preserve explicit flammability warnings rather than declaring unknown."""
+    notice = extract_recall_details(
+        "Mermaid Princess Dress recalled due to flammability hazard", ""
+    )
+    assert notice.risk_type == "flammability"
+
+
+def test_live_canadian_combined_fall_and_entrapment_hazards() -> None:
+    """Both hazards explicitly appear in the publisher title."""
+    notice = extract_recall_details(
+        "Costway Convertible High Chairs recalled due to fall and entrapment hazards", ""
+    )
+    assert notice.risk_type == "multiple"
+    assert extract_recall_details("Entrapment hazard announced", "").risk_type == "entrapment"

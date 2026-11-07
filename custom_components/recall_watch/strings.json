@@ -51,7 +51,9 @@
           "burn": "Burn hazard",
           "electric_shock": "Electric shock",
           "choking": "Choking hazard",
-          "fall": "Fall hazard"
+          "fall": "Fall hazard",
+          "entrapment": "Entrapment hazard",
+          "flammability": "Flammability hazard"
         }
       },
       "latest_batch_number": {

@@ -111,7 +111,11 @@ _RISK_PATTERNS: dict[str, re.Pattern[str]] = {
     "burn": re.compile(r"\b(?:burn\s+hazards?|risk\s+of\s+burns|brännskador)\b", re.I),
     "electric_shock": re.compile(r"\b(?:electric\s+shock|electrocution|elektrisk\s+stöt)\b", re.I),
     "choking": re.compile(r"\b(?:choking\s+hazard|kvävningsrisk)\b", re.I),
-    "fall": re.compile(r"\b(?:fall\s+hazard|fallrisk|risk\s+of\s+falling)\b", re.I),
+    "fall": re.compile(
+        r"\b(?:fall\s+(?:and\s+\w+\s+)?hazards?|fallrisk|risk\s+of\s+falling)\b", re.I
+    ),
+    "entrapment": re.compile(r"\bentrapment(?:\s+hazards?)?\b", re.I),
+    "flammability": re.compile(r"\bflammability\s+hazards?\b", re.I),
     "packaging": re.compile(
         r"\b(?:defekt\s+förpackning|felaktig\s+förpackning|"
         r"skadad\s+förpackning|defective\s+packaging)\b", re.I
