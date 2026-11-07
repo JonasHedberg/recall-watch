@@ -40,7 +40,7 @@
     "english_and_swedish_ui": false,
     "migration_from_prior_release": false,
     "failure_recovery_and_stale_data": false,
-    "hacs_install_upgrade_and_uninstall": false,
+    "marketplace_install_upgrade_rollback_and_uninstall": false,
     "publisher_terms_and_attribution_reviewed": false,
     "recall_accuracy_manually_compared_with_authority": false,
     "github_ci_and_security_review": false
