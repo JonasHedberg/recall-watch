@@ -22,7 +22,7 @@
 - [ ] Verify the true Marketplace GUI workflow on a real HA 2026.11+ installation: clean install, English/Swedish screens, multiple sources, update, rollback, restart, migration and uninstall.
 - [ ] Independently compare a representative, reviewer-labelled corpus against original publisher notices across six sources, including EU detail records and corrected/withdrawn notices.
 - [ ] Human maintainer approves publisher reuse/attribution, rate limits and safety disclaimer; keep evidence accessible.
-- [ ] Add timestamped, genuine reviewer evidence and exact `reviewed_commit` SHA in `docs/release-evidence.json`; pass `python scripts/verify_release_evidence.py --expected-commit <SHA>` and the manual **Release preflight** GitHub Actions workflow at that SHA, then independently review signoff.
+- [ ] Add timestamped, genuine reviewer evidence and exact `reviewed_commit` SHA in `docs/release-evidence.json`; pass `python scripts/verify_release_evidence.py --expected-commit <SHA>` and the manual **Release preflight** GitHub Actions workflow after the reviewed source commit and evidence-record-only commit, then independently review signoff. Source changes following signoff require a fresh review.
 - [ ] Replace any obsolete required status check with **Marketplace repository validation** under GitHub's protected-`main` rule. Keep offline tests and hassfest mandatory.
 - [ ] Change the existing `v0.4.0b1` GitHub Release to **pre-release** (or withdraw it) without rewriting history.
 - [ ] Review final CI on the exact merge candidate, publish a **new** `v0.4.0b2` GitHub **pre-release**, and test its published-version installation through Marketplace.
