@@ -20,7 +20,7 @@ This beta updates the international recall monitoring integration for Home Assis
 
 - Minimum Home Assistant version: **2026.11.0**.
 - Automated CI target: **Home Assistant 2026.11.0**, Python 3.14.
-- Home Assistant 2026.11+: **Settings → Marketplace → Add from link**, using `https://github.com/JonasHedberg/recall-watch`.
+- Home Assistant 2026.11+: **Settings → Marketplace → Add from link**, using `https://github.com/JonasHedberg/recall-watch`. Enable the repository's **Pre-release** entity under **Settings → Devices & services → Marketplace** when deliberately testing this beta.
 - An existing `v0.4.0b1` installation should be backed up prior to opting into this new beta. Test migration and rollback in a test Home Assistant instance first.
 
 ## Coverage and safety limitations
