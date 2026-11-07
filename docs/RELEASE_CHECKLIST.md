@@ -6,7 +6,7 @@
 
 - [x] Home Assistant 2026.11.0 is the required minimum version in Marketplace metadata.
 - [x] Mandatory Marketplace `hacs.json` metadata is present; only the official Marketplace distribution is documented.
-- [x] **103 offline tests on Python 3.13 and 103 on 3.14** pass in [Actions run 42378433794](https://github.com/JonasHedberg/recall-watch/actions/runs/42378433794).
+- [x] **106 offline tests on Python 3.13 and 106 on 3.14** passed in [Actions run 42378906542](https://github.com/JonasHedberg/recall-watch/actions/runs/42378906542).
 - [x] **6 native HA 2026.11 integration tests** pass with the official first-party test harness.
 - [x] Marketplace structural validation and Home Assistant hassfest pass.
 - [x] All six curated public-source HTTP feeds successfully fetched and parsed in the latest bounded live probe.
@@ -15,6 +15,7 @@
 - [x] Fail-closed handling for populated yet unusable RSS/Atom/CPSC responses and malformed notice links verified by new regression tests.
 - [x] Removed obsolete no-op CI workflow and required offline tests as a prerequisite for the overall hassfest gate.
 - [x] Implemented a separate manual **Release preflight** workflow that fails closed without real reviewer evidence and independently reruns offline, native HA, live-source and hassfest checks.
+- [x] Expanded CI review artifacts to include up to twelve stratified candidate notices per authority; manual publisher comparisons remain an unchecked requirement.
 - [x] Live-derived Canadian flammability and fall/entrapment hazard recognition added.
 - [x] Independent spot-checks of ten publisher notices and provisional publisher reuse research recorded.
 
