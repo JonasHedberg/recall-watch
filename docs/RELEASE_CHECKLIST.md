@@ -1,4 +1,4 @@
-# Release checklist — next public beta candidate
+# Release checklist — v0.4.0b2 beta candidate (2026-11-07)
 
 **NOT RELEASE APPROVED.** Do not reuse/overwrite the existing public `v0.4.0b1` tag. Run `python scripts/verify_release_evidence.py` only after attaching genuine, recent evidence and completing [Release acceptance](RELEASE_ACCEPTANCE.md).
 
@@ -20,6 +20,7 @@
 
 - [ ] Complete representative original-notice accuracy assessment, especially EU detail records and corrected/withdrawn notices; [ten independent spot checks](AUTHORITY_SAMPLE_AUDIT.md) completed but do not meet full acceptance.
 - [ ] Test all six sources in an actual Home Assistant installation, user-facing English and Swedish UI, migration, restart, reconfiguration, outage and stale-state recovery.
+- [ ] Pass native Home Assistant CI against both 2026.10.4 and 2026.11.0, and verify Marketplace compatibility under 2026.11.
 - [ ] Confirm HACS/Marketplace install/upgrade/uninstall from the proposed release.
 - [ ] Confirm the publisher's specific reuse terms, logo/trademark rights, licence/attribution and responsible polling with a human maintainer.
 - [ ] Reclassify or withdraw prior published `v0.4.0b1` as an unapproved beta; do not modify an existing tag's history.

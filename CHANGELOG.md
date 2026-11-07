@@ -1,33 +1,41 @@
 # Changelog
 
-## [0.4.0b1] - Unreleased beta candidate
+All notable changes to Recall Watch are recorded here. Version numbers in the manifest describe the source version; a GitHub release is published separately after formal acceptance.
 
-- Add European Commission **Safety Gate** weekly XML source for dangerous **non-food** product alerts (EU/EEA), not exhaustive food recalls.
-- Select the two latest official weekly reports with bounded requests, XML safety guards and official-record URL checks.
-- Parse explicit product, brand, risk and batch information without inferring unknown metadata.
-- Add offline XML index/report regression tests and live acceptance requirements.
-- This code is **not production-approved**. No GitHub release or tag should be created until upstream feed and Home Assistant runtime testing is complete.
+## [0.4.0b2] — Release candidate, not published (2026-11-07)
 
-# Changelog
+### Fixed
+- Fully consume bounded HTTP responses rather than parsing incomplete chunks.
+- Reject redirects to unexpected hosts; preserve endpoint/size limits.
+- Restore EU Safety Gate as a selectable source in `recall_watch.get_notices`.
+- Support complete bounded two-week EU Safety Gate pagination (offset up to 500).
+- Order CPSC recall notices by their last publication/update date while preserving the original recall date.
+- Improve conservative product and hazard recognition from Swedish, Canadian, UK and US notices, including explicit fall risk with English and Swedish translations.
 
-All notable user-visible changes are documented here. Version numbers in this repository describe **unreleased candidate code**, not published GitHub releases.
+### Validation
+- Test cases for client, translations and six Home Assistant runtime fixtures.
+- Test live public-source parsers for EU, Sweden, Canada, UK and US in CI.
+- Add Home Assistant 2026.11.0 compatibility matrix to the existing 2026.10.4 suite.
+- Implement a fail-closed release-evidence checklist; retain unresolved real installation and publisher-accuracy checks.
 
-## 0.3.0b1 — Unreleased international beta candidate (2026-10-24)
+**Release caveat:** This is a proposed beta, not a verified safety service. A keyword match is not a confirmed product/batch match; lack of an alert does not establish safety. No public release is authorized until the acceptance checklist is signed.
 
-- Added fixed-source adapters for Canada (food and consumer products), GOV.UK/OPSS product recalls (Atom), and US CPSC consumer products (JSON API), retaining the Swedish Food Agency source.
-- Added independent configuration entries, coordinator state, keyword filters and six sensors per source.
-- Added `source` field and strict source separation for the `recall_watch.get_notices` action; omit source only if exactly one source is configured.
-- Preserved existing Swedish config entries with explicit v1→v2 migration; preserved entry-based entity unique IDs.
-- Added source/country/category metadata to serializations and increased the hazard vocabulary for international products.
-- Restricted CPSC data retrieval to a rolling 90-day update window; no full historic data load.
-- Removed the HACS country-specific metadata, since the integration now supports multiple jurisdictions.
-- Updated English documentation, maintained Swedish UI translations and added international source tests.
-- **Still blocked:** real runtime testing, live feed/API data contracts, HACS/hassfest, owner configuration and release approval.
+## [0.4.0b1] — Published on GitHub (2026-10-24)
 
-## 0.2.0b1 — Earlier Swedish beta candidate
+- Initial EU Safety Gate two-weekly-report dangerous non-food alert support.
+- Multi-region sources introduced as a beta (EU, SE, Canada, UK and US).
+- This beta was published as a regular GitHub release by mistake; its metadata must be changed to pre-release or explicitly withdrawn. Never rewrite its published tag.
 
-- Added conservative product, brand, risk, batch and best-before extraction, new sensors, bounded previews and paginated action responses.
+## [0.3.0b1] — Historical development candidate
 
-## 0.1.0b1 — Initial Swedish beta candidate
+- Canadian food/consumer sources, GOV.UK Atom feed and US CPSC API.
+- Multi-source config entries, six per-source sensors, keyword filters and action source selection.
+- Version 1 to version 2 Swedish configuration migration.
 
-- Added basic Swedish RSS client, config/option flows, count sensor and localizations.
+## [0.2.0b1] — Historical development candidate
+
+- Conservative product, brand, risk, batch and best-before extraction, plus preview sensors and response-only notices.
+
+## [0.1.0b1] — Historical development candidate
+
+- Swedish Food Agency RSS client, configuration flow and count sensor with English and Swedish localization.

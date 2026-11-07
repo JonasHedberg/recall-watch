@@ -1,6 +1,6 @@
 # Recall Watch — International product recall monitoring for Home Assistant
 
-> **Release-readiness draft for the next beta — NOT APPROVED FOR PUBLIC RELEASE.** The existing published `v0.4.0b1` is not the corrected PR version. Automated live reads and limited native Home Assistant tests have now passed, but human approval remains incomplete. This is a third-party Home Assistant integration, not an official Home Assistant Core integration, an official government service, or a substitute for checking authoritative safety notices. Do **not** publish a release until [every release gate](docs/RELEASE_ACCEPTANCE.md) is cleared.
+> **0.4.0b2 release candidate — NOT YET RELEASE APPROVED.** The existing published `v0.4.0b1` is an older, unverified beta. This proposed update has automated live-data checks and native Home Assistant tests, but the actual Marketplace/HACS installation, source-accuracy acceptance and maintainer approval still require evidence. This is a third-party Home Assistant integration, not an official Home Assistant Core integration, an official government service, or a substitute for checking authoritative safety notices. Do **not** publish a release until [every release gate](docs/RELEASE_ACCEPTANCE.md) is cleared.
 
 Recall Watch surfaces official recall notices as Home Assistant sensors and a response-only action. Choose one or more supported country-specific sources. Each configured source is independent, with its own keyword filter, coordinator and entity set. The integration never uploads keyword lists to a Recall Watch server; queries use only fixed government endpoints.
 
@@ -35,7 +35,7 @@ Official-source references and exact fixed URLs are documented in [DATA_SOURCES.
 
 ## Installation
 
-The project source is available at [JonasHedberg/recall-watch](https://github.com/JonasHedberg/recall-watch). The current development branch is an **unapproved release candidate**; the previously published `v0.4.0b1` is older and has not satisfied the full acceptance process. Review these limitations before testing:
+The project source is available at [JonasHedberg/recall-watch](https://github.com/JonasHedberg/recall-watch). The current `0.4.0b2` development branch is an **unapproved release candidate**; the previously published `v0.4.0b1` is older and has not satisfied the full acceptance process. Review these limitations before testing:
 
 1. Make a backup of your Home Assistant configuration.
 2. On Home Assistant 2026.10 or earlier, in HACS add `JonasHedberg/recall-watch` as a **Custom repository → Integration**, once a tested HACS release is available. On Home Assistant 2026.11+, use the built-in **Marketplace** with its custom repository option.
@@ -122,7 +122,7 @@ Copyright attribution and third-party rights are discussed in
 ## Contribute and maintain
 
 - [Contributing](CONTRIBUTING.md) · [Security reporting](SECURITY.md) · [Support](SUPPORT.md) · [Changelog](CHANGELOG.md)
-- [Development](docs/DEVELOPMENT.md) · [Quality verification](docs/QA_REPORT.md) · [Release acceptance](docs/RELEASE_ACCEPTANCE.md) · [Release checklist](docs/RELEASE_CHECKLIST.md)
+- [Development](docs/DEVELOPMENT.md) · [Quality verification](docs/QA_REPORT.md) · [0.4.0b2 release notes (candidate)](docs/RELEASE_NOTES_0.4.0b2.md) · [Release acceptance](docs/RELEASE_ACCEPTANCE.md) · [Release checklist](docs/RELEASE_CHECKLIST.md)
 - [Repository publishing](docs/GITHUB_SETUP.md) · [Roadmap](docs/ROADMAP.md)
 
 License: [MIT](LICENSE). Copyright (c) 2026 Recall Watch contributors.

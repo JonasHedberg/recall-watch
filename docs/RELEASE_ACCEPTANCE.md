@@ -1,6 +1,6 @@
 # Public release acceptance — Recall Watch
 
-**Status: BLOCKED (2026-10-31).** Passing unit tests, HACS validation and hassfest do not prove real Home Assistant operation or accuracy of live public-authority recalls.
+**Status: BLOCKED (2026-11-07), pending beta 0.4.0b2 acceptance.** Passing unit tests, HACS validation and hassfest do not prove real Home Assistant operation or accuracy of live public-authority recalls.
 
 ## Mandatory acceptance procedure
 

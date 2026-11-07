@@ -20,7 +20,7 @@ Only one custom integration resides under `custom_components/`. Runtime files st
 
 ## User installation after the repository exists
 
-For Home Assistant **2026.10 and earlier**, use HACS and add `<OWNER>/recall-watch` as a custom repository of type **Integration**. For Home Assistant **2026.11 and later**, use the built-in **Marketplace**; installation routes may vary as the UI evolves. The repository is not automatically in the default catalog.
+For Home Assistant **2026.10 and earlier**, use HACS and add `JonasHedberg/recall-watch` as a custom integration repository. For **2026.11 and later**, open **Settings → Marketplace → Add from link**, enter `https://github.com/JonasHedberg/recall-watch` and connect GitHub when requested. The repository is not automatically in the default catalog. The legacy HACS custom integration is replaced by Marketplace in Home Assistant 2026.11.
 
 After installing, restart Home Assistant as requested, navigate to **Settings → Devices & services → Add integration**, search for **Recall Watch** and select an official source, then configure keywords (optional). Add another Recall Watch instance to select another country or category. `get_notices` is a response-only action and must be invoked from a suitable automation or Developer Tools interface that supports response data.
 
@@ -32,7 +32,7 @@ A GitHub prerelease is not the same as a stable release. When releases exist, ve
 
 ## Known constraints
 
-No currently supplied integration version has been validated in a real HA runtime or with live recall feed requests in this delivery. Configure and test in a disposable installation first. If the public RSS feed is blocked or changes format, the integration cannot provide reliable results. Recall Watch is **not** a safety assurance service.
+Automated native Home Assistant API tests and live feed parsing tests have passed in CI, but end-user installation, Marketplace GUI behavior and complete original-notice accuracy are not yet signed off. Configure and test in a disposable installation first. If the public RSS feed is blocked or changes format, the integration cannot provide reliable results. Recall Watch is **not** a safety assurance service.
 
 
 ## International country metadata
