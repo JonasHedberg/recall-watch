@@ -11,7 +11,7 @@ The public repository already exists at [JonasHedberg/recall-watch](https://gith
 3. Visibility: **Public**. Set the default branch to `main`.
 4. Do **not** initialize with another README, license or `.gitignore`; they are included already.
 5. After creation, enable **Issues** and **Actions**. Optionally enable Discussions.
-6. Description: `International product recall monitoring for Home Assistant: Sweden, Canada, United Kingdom and United States.`
+6. Description: `Unofficial recall and product safety alert monitoring for Home Assistant: EU, Sweden, Canada, UK and US.`
 7. Topics: `home-assistant`, `homeassistant`, `marketplace`, `custom-integration`, `food-safety`, `product-recalls`, `sweden`, `canada`, `united-kingdom`, `united-states`, `python`.
 8. Under repository **Settings → Security and quality → Advanced Security**, enable **Private vulnerability reporting**. The exact labels can change.
 
@@ -32,7 +32,7 @@ This updates `manifest.json`, `.github/CODEOWNERS` and the custom-repository pat
 ```sh
 git init -b main
 git add .
-git commit -m "Add international Recall Watch 0.3 beta candidate"
+git commit -m "Add Recall Watch Marketplace beta candidate"
 git remote add origin https://github.com/YOUR_GITHUB_OWNER/recall-watch.git
 git push -u origin main
 ```
@@ -41,12 +41,14 @@ If the ZIP was extracted inside another Git repository, run these commands in a 
 
 ## 4. Set repository protections
 
-- Require pull requests, reviews and passing CI checks for protected `main` when available on your plan.
+- Require pull requests, reviews and passing CI checks for protected `main` when available on your plan. Under **Settings → Branches → Branch protection rules** (or **Settings → Rules → Rulesets**, if configured), remove the obsolete validator check and require the real check names: `Marketplace repository validation`, `Home Assistant hassfest`, `Offline unit tests (Python 3.13)` and `Offline unit tests (Python 3.14)`. Keep the native Home Assistant and live-source checks enforced by the hassfest prerequisite job on pull requests.
 - Give GitHub Actions only **read** permission by default; maintainers handle releases manually.
 - Enable Dependabot alerts and update pull requests where available.
 - Confirm `README.md`, license, contribution and security policies appear under GitHub's community standards.
-- Run and inspect the `Check integration` workflow after the first push. Fix all errors, including Home Assistant brands/manifest warnings.
+- Run and inspect **Marketplace and Home Assistant validation** in GitHub Actions. Fix all failures, including Home Assistant brands/manifest warnings. Do not accept a green legacy no-op check.
 - Do not claim Marketplace catalog inclusion merely because the repository is public.
+- In **GitHub → Releases → v0.4.0b1 → Edit**, mark the previously published beta as **pre-release**; do not delete, move or retag its history. The connected GitHub app does not expose release-management rights.
+- Update the repository **About** description to the multi-jurisdiction, food-and-consumer-alert description in [REPOSITORY_METADATA.md](REPOSITORY_METADATA.md). The connected app cannot update repository About metadata.
 
 ## 5. Brand assets and catalog
 
