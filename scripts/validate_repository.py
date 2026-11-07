@@ -22,7 +22,7 @@ REQUIRED = [
     ".github/ISSUE_TEMPLATE/bug_report.yml",
     ".github/ISSUE_TEMPLATE/feature_request.yml",
     ".github/ISSUE_TEMPLATE/config.yml",
-    ".github/workflows/ci.yml", ".github/dependabot.yml",
+    ".github/workflows/validate.yml", ".github/dependabot.yml",
     "custom_components/recall_watch/__init__.py",
     "custom_components/recall_watch/sensor.py",
     "custom_components/recall_watch/manifest.json",
