@@ -2,7 +2,9 @@ name: Marketplace and Home Assistant validation
 
 on:
   push:
+    branches: [main]
   pull_request:
+    branches: [main]
   workflow_dispatch:
   schedule:
     - cron: "17 4 * * 1"
@@ -57,21 +59,26 @@ jobs:
 
   hassfest:
     name: Home Assistant hassfest
-    needs: [live_sources, ha_runtime, marketplace]
+    needs: [tests, live_sources, ha_runtime, marketplace]
     if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
+      - name: Enforce offline and Marketplace checks
+        env:
+          TEST_RESULT: ${{ needs.tests.result }}
+          MARKETPLACE_RESULT: ${{ needs.marketplace.result }}
+        run: |
+          test "$TEST_RESULT" = "success"
+          test "$MARKETPLACE_RESULT" = "success"
       - name: Enforce live and native Home Assistant PR checks
         if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
         env:
           LIVE_RESULT: ${{ needs.live_sources.result }}
           HA_RESULT: ${{ needs.ha_runtime.result }}
-          MARKETPLACE_RESULT: ${{ needs.marketplace.result }}
         run: |
           test "$LIVE_RESULT" = "success"
           test "$HA_RESULT" = "success"
-          test "$MARKETPLACE_RESULT" = "success"
       - name: Checkout
         uses: actions/checkout@v7
         with:
