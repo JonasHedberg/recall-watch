@@ -22,7 +22,7 @@ REQUIRED_CHECKS = (
     "english_and_swedish_ui",
     "migration_from_prior_release",
     "failure_recovery_and_stale_data",
-    "hacs_install_upgrade_and_uninstall",
+    "marketplace_install_upgrade_rollback_and_uninstall",
     "publisher_terms_and_attribution_reviewed",
     "recall_accuracy_manually_compared_with_authority",
     "github_ci_and_security_review",
