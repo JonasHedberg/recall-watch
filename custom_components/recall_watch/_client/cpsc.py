@@ -102,4 +102,6 @@ def parse_cpsc_recalls(data: bytes, *, source_id: str = "us_consumer") -> tuple[
 
         return (utc(notice.updated or notice.published), utc(notice.published), notice.identifier)
 
+    if records and not output:
+        raise RecallParseError("CPSC response contains no usable notices")
     return tuple(sorted(output, key=chronological_key, reverse=True))
