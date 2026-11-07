@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parents[2]
 
 def evidence() -> dict:
     return {
-        "release_tag": "v0.4.1b1", "reviewed_by": "Example Reviewer",
+        "release_tag": "v0.4.0b2", "reviewed_by": "Example Reviewer",
         "reviewed_at": datetime.now(timezone.utc).isoformat(),
         "sources": {k: {"live_parser_passed": True, "manual_authority_comparison": True,
                         "evidence_url": f"https://example.com/{k}"} for k in SOURCES},
@@ -39,6 +39,15 @@ def test_old_evidence_and_missing_reviewer_are_blocked() -> None:
     data["reviewed_by"] = ""
     data["reviewed_at"] = "2020-01-01T00:00:00+00:00"
     assert len(verify(data)) >= 2
+
+
+def test_evidence_rejects_stale_or_mismatching_release_tag() -> None:
+    data = evidence()
+    data["release_tag"] = "v0.4.0b1"
+    assert any("manifest version" in error for error in verify(data))
+
+    data["release_tag"] = "v0.4.0b2"
+    assert verify(data) == []
 
 
 def test_template_is_deliberately_unapproved() -> None:

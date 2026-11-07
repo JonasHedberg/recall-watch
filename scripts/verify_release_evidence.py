@@ -7,6 +7,12 @@ import json
 from pathlib import Path
 import sys
 
+ROOT = Path(__file__).resolve().parents[1]
+MANIFEST_VERSION = json.loads(
+    (ROOT / "custom_components/recall_watch/manifest.json").read_text(encoding="utf-8")
+)["version"]
+EXPECTED_RELEASE_TAG = f"v{MANIFEST_VERSION}"
+
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "custom_components" / "recall_watch"))
 from _client.sources import SOURCES
 
@@ -28,8 +34,10 @@ def verify(evidence: dict, *, now: datetime | None = None) -> list[str]:
     now = now or datetime.now(timezone.utc)
     if not isinstance(evidence, dict):
         return ["Evidence must be a JSON object"]
-    if evidence.get("release_tag") in (None, "", "REPLACE_ME"):
-        errors.append("Release tag is not specified")
+    if evidence.get("release_tag") != EXPECTED_RELEASE_TAG:
+        errors.append(
+            f"Release tag must match the manifest version: {EXPECTED_RELEASE_TAG}"
+        )
     reviewer = evidence.get("reviewed_by")
     if not isinstance(reviewer, str) or len(reviewer.strip()) < 3:
         errors.append("Human reviewer identity is required")
