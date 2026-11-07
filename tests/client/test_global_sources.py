@@ -166,3 +166,10 @@ def test_pagination_reaches_500th_eu_alert() -> None:
     assert page_notices(items, offset=500, limit=20)["notices"] == []
     with pytest.raises(ValueError):
         page_notices(items, offset=501, limit=20)
+
+
+def test_cpsc_populated_but_unusable_response_is_not_a_zero_recall_result() -> None:
+    with pytest.raises(RecallParseError, match="no usable notices"):
+        parse_cpsc_recalls(json.dumps([{}, {"Title": ""}, None]).encode())
+    # A genuinely empty, well-formed response remains a valid empty feed.
+    assert parse_cpsc_recalls(b"[]") == ()
