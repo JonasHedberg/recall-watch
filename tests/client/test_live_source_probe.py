@@ -26,9 +26,18 @@ def test_audit_sample_is_diverse_bounded_and_deduplicated() -> None:
     samples = choose_review_samples(records)
     ids = [item.identifier for item in samples]
     assert len(ids) == len(set(ids))
-    assert len(ids) <= 12
+    assert len(ids) == 12
     assert {"notice-0", "notice-1", "notice-28", "notice-29",
             "notice-8", "notice-11", "notice-14"}.issubset(ids)
+
+
+def test_audit_sample_stratifies_when_no_special_hazards() -> None:
+    records = tuple(notice(n) for n in range(80))
+    samples = choose_review_samples(records)
+    assert len(samples) == 12
+    assert len(set(item.identifier for item in samples)) == 12
+    assert samples[0].identifier == "notice-0"
+    assert samples[-1].identifier != samples[0].identifier
 
 
 def test_audit_sampling_small_sources_and_empty_sources() -> None:
