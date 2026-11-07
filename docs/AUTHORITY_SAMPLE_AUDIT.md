@@ -27,3 +27,9 @@ This is a **small, independent research spot-check** against publisher pages; it
 ## Remaining acceptance
 
 The maintainer must review a broad, labelled corpus spanning each provider, removed/corrected entries, hazards that conflict with headlines and records with missing data. Provide evidence links and a dated review for each source under `docs/release-evidence.json` before releasing; this research note does **not** satisfy the `manual_authority_comparison` gate on its own.
+
+## Automated review-candidate corpus (7 November 2026)
+
+The source probe now writes a bounded, **non-verified** review-candidate sample (at most twelve notices per authority) to the workflow artifact. It includes original URLs, publication/update times, risk classifications, brief summary excerpts, and any explicitly extracted batch or best-before fields. The selection covers first/last notices, different risk classes, explicitly corrected/withdrawn labels, updates, batch-bearing records, and other time-spaced records when available. See [the latest expanded sampling CI](https://github.com/JonasHedberg/recall-watch/actions/runs/42378906542).
+
+A live feed may not contain any corrected or withdrawn notices. **The sample is neither an independently verified corpus nor a coverage or accuracy statistic.** A maintainer must compare every selected item against its original authority page, expand to historical corrected/withdrawn items outside the current bounded feed, record disagreements and corrections, and sign off each publisher separately. Do not mark `manual_authority_comparison` true merely because a parser completed or a sample was saved.

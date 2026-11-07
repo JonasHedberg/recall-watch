@@ -7,16 +7,17 @@ ROOT = Path(__file__).resolve().parents[2]
 COMPONENT = ROOT / "custom_components" / "recall_watch"
 
 
-def test_manifest_and_hacs_layout() -> None:
+def test_manifest_and_marketplace_layout() -> None:
     manifest = json.loads((COMPONENT / "manifest.json").read_text())
-    hacs = json.loads((ROOT / "hacs.json").read_text())
+    marketplace_metadata = json.loads((ROOT / "hacs.json").read_text())
     assert manifest["domain"] == COMPONENT.name == "recall_watch"
     assert manifest["config_flow"] is True
-    assert manifest["version"] == "0.4.0b1"
+    assert manifest["version"] == "0.4.0b2"
     assert manifest["requirements"] == ["defusedxml>=0.7.1"]
     assert (COMPONENT / "_client" / "client.py").exists()
     assert (COMPONENT / "strings.json").exists()
-    assert hacs["name"] == "Recall Watch"
+    assert marketplace_metadata["name"] == "Recall Watch"
+    assert marketplace_metadata["homeassistant"] == "2026.11.0"
 
 
 def test_localizations_share_all_keys() -> None:

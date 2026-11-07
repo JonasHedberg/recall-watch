@@ -66,9 +66,24 @@ def test_bounded_attributes() -> None:
     assert len(result[0].title) == 2048
 
 
-def test_items_without_titles_are_ignored() -> None:
-    result = parse_recall_feed(b"<rss><channel><item><link>https://example.org</link></item></channel></rss>")
-    assert result == ()
+def test_populated_feed_with_only_invalid_records_fails_closed() -> None:
+    with pytest.raises(RecallParseError, match="no usable notices"):
+        parse_recall_feed(b"<rss><channel><item><link>https://example.org</link></item></channel></rss>")
+
+
+def test_invalid_links_do_not_crash_otherwise_valid_feeds() -> None:
+    for link in ("https://[invalid", "https://example.org:invalid/path",
+                 "https://user:password@example.org/recall", "https://example.org:99999"):
+        feed = (f"<rss><channel><item><title>Valid recall</title>"
+                f"<link>{link}</link></item></channel></rss>").encode()
+        notices = parse_recall_feed(feed)
+        assert len(notices) == 1
+        assert notices[0].url is None
+
+
+def test_populated_atom_with_only_invalid_records_fails_closed() -> None:
+    with pytest.raises(RecallParseError, match="no usable notices"):
+        parse_recall_feed(b'<feed xmlns="http://www.w3.org/2005/Atom"><entry><id>id</id></entry></feed>')
 
 
 def test_newest_dated_notices_first_and_undated_last() -> None:

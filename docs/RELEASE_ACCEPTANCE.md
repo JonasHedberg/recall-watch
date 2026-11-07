@@ -1,6 +1,6 @@
 # Public release acceptance — Recall Watch
 
-**Status: BLOCKED (2026-10-31).** Passing unit tests, HACS validation and hassfest do not prove real Home Assistant operation or accuracy of live public-authority recalls.
+**Status: BLOCKED (2026-11-07), pending beta 0.4.0b2 acceptance.** Passing unit tests, Marketplace validation and hassfest do not prove real Home Assistant operation or accuracy of live public-authority recalls.
 
 ## Mandatory acceptance procedure
 
@@ -8,8 +8,8 @@
 2. Verify clean install, restart, source deduplication, options update/reload, source unload, migration from Swedish v0.2, loss of network, stale cached data and recovery. Check the real Swedish and English interface.
 3. Run `python scripts/live_source_probe.py --output /tmp/recall-watch-live-results.json` on a networked host. The workflow's optional **Live publisher probes** job runs the same parser on actual public data. Both are probes, not evidence of accurate product classification.
 4. For every source, compare actual product, brand, hazard, batch, identifier, original URL and dates with real authority notices. [Ten independently checked original notices](AUTHORITY_SAMPLE_AUDIT.md) provide a starting point, not a representative acceptance corpus. Explicitly distinguish Safety Gate *alerts* from actual recalls and verify both weekly index and report payloads.
-5. Review source reuse terms, attribution, availability, polling frequency, and regional limitations. Verify HACS/Marketplace installation, upgrade and uninstall in actual Home Assistant.
-6. Ensure all required GitHub checks pass and separately review security and all live-probe results. Fill `docs/release-evidence.json` from the template, with human review identity, current time and HTTPS links to retained proof. Run `python scripts/verify_release_evidence.py`.
+5. Review source reuse terms, attribution, availability, polling frequency, and regional limitations. Verify Marketplace installation, upgrade and uninstall in actual Home Assistant.
+6. Ensure all required GitHub checks pass and separately review security and all live-probe results. Fill `docs/release-evidence.json` from the template, with human review identity, exact reviewed 40-character Git SHA (`reviewed_commit`), current time and HTTPS links to retained real proof. Record the last fully reviewed code commit SHA before adding the evidence file. Run `python scripts/verify_release_evidence.py --expected-commit <the-reviewed-40-character-sha>` and the manual GitHub **Release preflight** workflow. Because a commit cannot include its own SHA, the preflight allows the evidence-record commit to follow the reviewed commit, but rejects **all other changed files** after review.
 7. Publish a **new** beta tag matching the exact accepted source revision, mark its GitHub Release as **pre-release**, and smoke-test installation from that release. Never claim that a successful mocked unit test is live verification.
 
 ## Existing incorrectly classified beta release

@@ -1,0 +1,118 @@
+name: Release preflight (human approval gate)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  acceptance:
+    name: Verify Marketplace release acceptance
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out full history
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.14"
+      - name: Install validation dependencies
+        run: python -m pip install -r requirements-dev.txt
+      - name: Run offline regression tests
+        run: python -m pytest -q
+      - name: Validate integration metadata
+        run: python scripts/validate_marketplace.py
+      - name: Compile integration source
+        run: python -m compileall -q custom_components/recall_watch
+      - name: Confirm human acceptance refers to unmodified reviewed code
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ ! -f docs/release-evidence.json ]]; then
+            echo "::error::Missing signed acceptance file docs/release-evidence.json"
+            exit 1
+          fi
+          reviewed_commit="$(python -c 'import json; print(json.load(open("docs/release-evidence.json", encoding="utf-8")).get("reviewed_commit", ""))')"
+          if [[ ! "$reviewed_commit" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "::error::Missing or invalid exact code revision in acceptance evidence"
+            exit 1
+          fi
+          git cat-file -e "${reviewed_commit}^{commit}"
+          git merge-base --is-ancestor "$reviewed_commit" HEAD || {
+            echo "::error::Reviewed revision is not an ancestor of the release candidate"
+            exit 1
+          }
+          # Approval is tied to the reviewed source revision. The only allowed
+          # subsequent commit content is the approval record itself; otherwise
+          # the source must be reviewed again.
+          unexpected="$(git diff --name-only "$reviewed_commit" HEAD | grep -v -x 'docs/release-evidence.json' || true)"
+          if [[ -n "$unexpected" ]]; then
+            echo "::error::Source changed after human review: $unexpected"
+            exit 1
+          fi
+          python scripts/verify_release_evidence.py --expected-commit "$reviewed_commit"
+
+  native_runtime:
+    name: Home Assistant 2026.11 release smoke tests
+    needs: acceptance
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.14"
+      - name: Install official Home Assistant 2026.11 test harness
+        run: |
+          python -m pip install "homeassistant==2026.11.0" "pytest-homeassistant @ https://github.com/home-assistant/core/archive/refs/tags/2026.11.0.tar.gz#subdirectory=packages/pytest-homeassistant" "defusedxml==0.7.1"
+          python -m pip check
+      - name: Run native Home Assistant contract tests
+        run: python -m pytest tests/ha_runtime -q
+
+  publisher_probes:
+    name: Final live authority feed probes
+    needs: acceptance
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.14"
+      - name: Install probe dependencies
+        run: python -m pip install "aiohttp>=3.14.5,<4" "defusedxml==0.7.1"
+      - name: Check all six live publisher sources
+        run: python scripts/live_source_probe.py --output /tmp/recall-watch-release-probes.json
+      - name: Upload public-source review data
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: recall-watch-release-probes
+          path: /tmp/recall-watch-release-probes.json
+          if-no-files-found: warn
+
+  hassfest:
+    name: Final Home Assistant hassfest
+    needs: [acceptance, native_runtime, publisher_probes]
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Home Assistant hassfest
+        uses: home-assistant/actions/hassfest@master

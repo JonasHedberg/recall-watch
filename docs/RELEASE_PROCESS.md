@@ -1,41 +1,35 @@
-# Maintainer release process
+# Maintainer release process — Home Assistant Marketplace
 
-There are **three separate milestones**: a public source repository, a pre-release GitHub release, and optional HACS/Marketplace default-catalog inclusion. None is automatic.
+Recall Watch is a **third-party Marketplace integration**, not a bundled Core integration. A GitHub repository, a published GitHub version and catalog inclusion are separate stages.
 
-## A. Before any public beta release
+## Before publishing
 
-0. Follow [Release acceptance](RELEASE_ACCEPTANCE.md) and run `python scripts/verify_release_evidence.py`. Passing mocked tests does not authorize a public release.
-1. Assign a human maintainer, replace all owner placeholders, inspect third-party license obligations and confirm repository visibility is public.
-2. Run `python -m pytest -q` and `python scripts/validate_repository.py` locally.
-3. Run an actual supported Home Assistant instance with the component installed and exercise setup, options, sensors, `recall_watch.get_notices`, reload/unload and Swedish/English translations.
-4. Confirm **every source** against live RSS, Atom or CPSC JSON, including actual extraction results reviewed against original agency records. Check source reuse requirements and responsible polling.
-5. Ensure HACS Action and hassfest pass in GitHub Actions. Do not bypass warnings silently.
-6. Confirm brand registration expectations with home-assistant/brands and test install, upgrade and removal from HACS/Marketplace.
-7. Review [release checklist](RELEASE_CHECKLIST.md), [QA report](QA_REPORT.md), [security policy](../SECURITY.md) and [data extraction policy](DATA_EXTRACTION.md).
-8. Run `python scripts/pre_release_check.py`. This only validates metadata and **never** proves production readiness.
+1. Confirm Home Assistant **2026.11.0 or later** compatibility and Marketplace structure: `python scripts/validate_marketplace.py`. The file `hacs.json` must remain in the repository root because the Marketplace requires that specific filename.
+2. Run offline tests, first-party Home Assistant 2026.11 native tests, hassfest and live authority probes in CI. Treat any failed source as a release blocker, not as zero notices or a safe-state signal.
+3. Follow [Manual Marketplace acceptance](MANUAL_HA_ACCEPTANCE.md) in a real Home Assistant 2026.11 installation and capture actual English/Swedish screenshots and install/update/rollback/uninstall results.
+4. Compare representative notices from all six publishers with original records, including dates, case IDs, alerts versus recalls, affected markets, models, batches and withdrawn/corrected notices.
+5. Review publisher licence, attribution and request-rate obligations; record a named, dated maintainer approval.
+6. Complete the [release acceptance](RELEASE_ACCEPTANCE.md) file `docs/release-evidence.json`; `python scripts/verify_release_evidence.py --expected-commit <SHA>` must pass with `reviewed_commit` equal to the exact accepted revision. The manual **Release preflight** GitHub Actions workflow checks that the reviewed SHA is an ancestor of the release candidate and no files other than `docs/release-evidence.json` changed after it. It also re-runs offline regression tests, native HA 2026.11 integration tests, live official-source parsers and hassfest at the release candidate HEAD. This workflow only exists on the default branch after the changes are merged and **does not publish** a release. This avoids the impossible requirement of signing a commit that contains its own hash. Commit the evidence only after reviewing the final code revision; do not fabricate acceptance.
+7. Confirm all applicable GitHub branch status checks are green at the exact accepted commit and no critical open security findings remain.
 
-## B. Tag and publish a release
+## Release versioning
 
-- Use a compatible version string in `custom_components/recall_watch/manifest.json` and in the git tag (example: `0.4.0b1`).
-- Update `CHANGELOG.md` and prepare release notes describing changes, incompatibilities, security implications and limitations.
-- Commit and merge the reviewed code, confirm the passing CI run, then create a matching annotated tag and GitHub **Release** (not tag alone).
-- Mark beta versions as **pre-release** on GitHub. HACS/Marketplace may require the user to opt in to pre-releases. A branch install is an alternative for testers.
-- Do not generate or upload a custom ZIP release asset unless `hacs.json` is intentionally changed to support it; the default integration layout works with source archives.
-- After publication, independently verify fresh installation and the resulting entity/action behavior.
-
-Example commands **after review and acceptance**:
+- The integration manifest has an unprefixed version such as `0.4.0b2`; publish it under the matching `v0.4.0b2` annotated Git tag.
+- Do not rewrite or reuse the older `v0.4.0b1` tag. The owner should correct that release's **pre-release** classification.
+- Prepare English release notes and changelog; for beta versions select **Set as a pre-release** in GitHub Releases.
+- The Marketplace uses GitHub's release archive for installing repositories. There is no requirement to attach an additional custom ZIP; keep the standard `custom_components/recall_watch` layout.
+- After publishing, verify **fresh Marketplace installation from the actual tag**, then use the Marketplace update, rollback and removal flows. A successful package check is not sufficient.
 
 ```sh
-git tag -a 0.4.0b1 -m "Recall Watch 0.4.0b1"
-git push origin 0.4.0b1
+# Only after human acceptance
+git tag -a v0.4.0b2 -m "Recall Watch v0.4.0b2"
+git push origin v0.4.0b2
 ```
 
-Then create the corresponding GitHub Release and mark it as a pre-release.
+## Optional catalog listing
 
-## C. Optional catalog inclusion
-
-Follow [HACS include documentation](https://hacs.dev/docs/publish/include/). The owner or significant contributor submits a PR to `hacs/default` only after licensing, metadata, a release and validators pass. **A custom integration used solely to alpha/beta test a forthcoming Core integration is not eligible for HACS default catalog inclusion.** Being a custom repository is still supported. Separately, official Home Assistant Core inclusion has its own contributor review and is not conferred by HACS acceptance.
+A custom repository can be used via **Settings → Marketplace → Add from link** without catalog acceptance. Inclusion in the shared catalog is a separate review and is not needed for a beta release. Do not claim official Home Assistant Core status.
 
 ## Rollback
 
-Before updating, back up Home Assistant configuration. If a release fails, use HACS/Marketplace version selection to return to a working build if supported, or restore the backup. Confirm any saved options and entity IDs before treating the rollback as complete.
+Back up Home Assistant settings before updates. Use the Marketplace's version selector to install a known-good version or restore the full test backup. Verify config entries, sensors, entity IDs and the `get_notices` action after restart.

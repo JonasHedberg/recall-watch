@@ -51,7 +51,9 @@
           "burn": "Brännskaderisk",
           "electric_shock": "Elektrisk stöt",
           "choking": "Kvävningsrisk",
-          "fall": "Fallrisk"
+          "fall": "Fallrisk",
+          "entrapment": "Fastklämningsrisk",
+          "flammability": "Brandfarlighet"
         }
       },
       "latest_batch_number": {

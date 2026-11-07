@@ -1,30 +1,34 @@
-# Release checklist — next public beta candidate
+# Release checklist — Marketplace-only v0.4.0b2
 
-**NOT RELEASE APPROVED.** Do not reuse/overwrite the existing public `v0.4.0b1` tag. Run `python scripts/verify_release_evidence.py` only after attaching genuine, recent evidence and completing [Release acceptance](RELEASE_ACCEPTANCE.md).
+**Status: BLOCKED until remaining real-world/manual acceptance.** The published `v0.4.0b1` release contains older code and must not be retagged or presented as the current candidate.
 
-## Implemented and tested in PR #12
+## Completed (7 November 2026)
 
-- [x] EU Safety Gate index/report support with fixed government endpoints, bounded `defusedxml` parsing and country-specific source isolation.
-- [x] EU action selector and full possible weekly-report pagination; regression tests.
-- [x] Complete bounded HTTP stream reads, including chunked responses; regression tests.
-- [x] CPSC update-aware ordering, preserving original recall date; regression tests.
-- [x] Conservative product/risk extraction improvements based on inspected live examples; regression tests.
-- [x] 95 offline tests on each of Python 3.13 and 3.14 (2026-10-31).
-- [x] 6 genuine Home Assistant 2026.10.4 framework tests for setup/config/action/unload, two source isolation, options, outage/recovery, migration and locale loading (2026-10-31).
-- [x] Passing HACS and Home Assistant hassfest validators (2026-10-31).
-- [x] Six publisher endpoints successfully fetched and parsed by a bounded live CI probe (2026-10-31).
-- [x] English and Swedish locale key parity; translated actual frontend remains unchecked.
-- [x] Preliminary publisher reuse research recorded in [Source reuse review](SOURCE_REUSE_REVIEW.md).
+- [x] Home Assistant 2026.11.0 is the required minimum version in Marketplace metadata.
+- [x] Mandatory Marketplace `hacs.json` metadata is present; only the official Marketplace distribution is documented.
+- [x] **106 offline tests on Python 3.13 and 106 on 3.14** passed in [Actions run 42378906542](https://github.com/JonasHedberg/recall-watch/actions/runs/42378906542).
+- [x] **6 native HA 2026.11 integration tests** pass with the official first-party test harness.
+- [x] Marketplace structural validation and Home Assistant hassfest pass.
+- [x] All six curated public-source HTTP feeds successfully fetched and parsed in the latest bounded live probe.
+- [x] English/Swedish translation-key parity and risk labels checked automatically.
+- [x] EU source selection and pagination, US update sorting, complete bounded stream reads, refusal of unapproved redirects and source isolation regression-tested.
+- [x] Fail-closed handling for populated yet unusable RSS/Atom/CPSC responses and malformed notice links verified by new regression tests.
+- [x] Removed obsolete no-op CI workflow and required offline tests as a prerequisite for the overall hassfest gate.
+- [x] Implemented a separate manual **Release preflight** workflow that fails closed without real reviewer evidence and independently reruns offline, native HA, live-source and hassfest checks.
+- [x] Expanded CI review artifacts to include up to twelve stratified candidate notices per authority; manual publisher comparisons remain an unchecked requirement.
+- [x] Live-derived Canadian flammability and fall/entrapment hazard recognition added.
+- [x] Independent spot-checks of ten publisher notices and provisional publisher reuse research recorded.
 
-## Must be completed before releasing
+## Must be completed before public release
 
-- [ ] Complete representative original-notice accuracy assessment, especially EU detail records and corrected/withdrawn notices; [ten independent spot checks](AUTHORITY_SAMPLE_AUDIT.md) completed but do not meet full acceptance.
-- [ ] Test all six sources in an actual Home Assistant installation, user-facing English and Swedish UI, migration, restart, reconfiguration, outage and stale-state recovery.
-- [ ] Confirm HACS/Marketplace install/upgrade/uninstall from the proposed release.
-- [ ] Confirm the publisher's specific reuse terms, logo/trademark rights, licence/attribution and responsible polling with a human maintainer.
-- [ ] Reclassify or withdraw prior published `v0.4.0b1` as an unapproved beta; do not modify an existing tag's history.
-- [ ] Human review and timestamped release evidence linked to GitHub artifacts/source comparisons.
-- [ ] Run `python scripts/verify_release_evidence.py` successfully and manually review the evidence; check CI at the final exact commit.
-- [ ] Mark the next beta GitHub Release as prerelease and smoke-test its fresh installation.
+- [ ] Verify the true Marketplace GUI workflow on a real HA 2026.11+ installation: clean install, English/Swedish screens, multiple sources, update, rollback, restart, migration and uninstall.
+- [ ] Independently compare a representative, reviewer-labelled corpus against original publisher notices across six sources, including EU detail records and corrected/withdrawn notices.
+- [ ] Human maintainer approves publisher reuse/attribution, rate limits and safety disclaimer; keep evidence accessible.
+- [ ] Add timestamped, genuine reviewer evidence and exact `reviewed_commit` SHA in `docs/release-evidence.json`; pass `python scripts/verify_release_evidence.py --expected-commit <SHA>` and the manual **Release preflight** GitHub Actions workflow after the reviewed source commit and evidence-record-only commit, then independently review signoff. Source changes following signoff require a fresh review.
+- [ ] Replace any obsolete required status check with **Marketplace repository validation** under GitHub's protected-`main` rule. Keep offline tests and hassfest mandatory.
+- [ ] Change the existing `v0.4.0b1` GitHub Release to **pre-release** (or withdraw it) without rewriting history.
+- [ ] Review final CI on the exact merge candidate, publish a **new** `v0.4.0b2` GitHub **pre-release**, and test its published-version installation through Marketplace.
 
-See [Live test matrix](LIVE_TEST_MATRIX.md), [Manual HA acceptance](MANUAL_HA_ACCEPTANCE.md), [authority sample audit](AUTHORITY_SAMPLE_AUDIT.md), and [QA report](QA_REPORT.md). A recall-monitoring tool must never claim that absent notifications establish product safety.
+See [QA report](QA_REPORT.md), [release acceptance](RELEASE_ACCEPTANCE.md), [manual Marketplace acceptance](MANUAL_HA_ACCEPTANCE.md), [source reuse](SOURCE_REUSE_REVIEW.md), and [original notice spot-checks](AUTHORITY_SAMPLE_AUDIT.md).
+
+An empty or failed upstream feed is **not proof that any product is safe**.

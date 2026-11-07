@@ -36,8 +36,17 @@ def _url(value: str | None) -> str | None:
     if not value:
         return None
     url = value.strip()
-    parsed = urlsplit(url)
-    if parsed.scheme not in ("http", "https") or not parsed.netloc:
+    # Untrusted publisher links can contain malformed IPv6, credentials or
+    # control characters. Reject rather than breaking a complete feed.
+    if any(ord(char) < 32 or ord(char) == 127 for char in url):
+        return None
+    try:
+        parsed = urlsplit(url)
+        if (parsed.scheme not in ("http", "https") or not parsed.hostname
+                or parsed.username is not None or parsed.password is not None):
+            return None
+        _ = parsed.port  # Validate that an explicit port is numeric and in range.
+    except ValueError:
         return None
     return url[:MAX_FIELD_CHARS]
 
@@ -124,5 +133,9 @@ def parse_recall_feed(data: bytes, *, source_id: str = "se_food") -> tuple[Recal
             date = date.replace(tzinfo=timezone.utc)
         return date.timestamp()
 
+    # A genuinely empty feed is possible. An apparently populated feed with
+    # zero usable records signals schema drift or bad upstream data instead.
+    if elements and not notices:
+        raise RecallParseError("Recall feed contains no usable notices")
     notices.sort(key=published_timestamp, reverse=True)
     return tuple(notices)

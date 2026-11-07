@@ -10,8 +10,8 @@ ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT.parent
 VERSION = json.loads((ROOT / "custom_components/recall_watch/manifest.json").read_text())["version"]
 ARTIFACTS = (
-    (OUT / f"recall-watch-hacs-{VERSION}-repository.zip", False),
-    (OUT / f"recall-watch-hacs-{VERSION}-manual-install.zip", True),
+    (OUT / f"recall-watch-marketplace-{VERSION}-repository.zip", False),
+    (OUT / f"recall-watch-marketplace-{VERSION}-manual-install.zip", True),
 )
 FORBIDDEN = {"__pycache__", ".pytest_cache", ".coverage", ".DS_Store", ".git", ".venv"}
 

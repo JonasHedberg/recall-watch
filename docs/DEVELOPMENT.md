@@ -13,7 +13,7 @@ custom_components/recall_watch/
   entity.py           Unique IDs and common coordinator-backed entity behavior
   sensor.py           Count sensor, five latest-field sensors, max-five preview
   services.yaml       Action descriptions and selector forms
-  manifest.json       HACS-compatible package metadata; version 0.4.0b1
+  manifest.json       Marketplace-compatible package metadata; version 0.4.0b2
   translations/       English and Swedish setup, options and entity strings
   brand/              Integration-provided artwork
   _client/
@@ -47,14 +47,14 @@ The bundled pure-Python client has no Home Assistant imports; the custom integra
 
 ## Required Home Assistant end-to-end checks
 
-In a **real supported Home Assistant runtime**, install `custom_components/recall_watch`, and test:
+In a **real supported Home Assistant runtime**, install Recall Watch through **Settings → Marketplace**, and test:
 
 1. Clean setup, language switching (English/Swedish), invalid keywords, duplicate entry prevention, options edit and reload.
 2. Count plus five latest-field sensors, `unknown` when fields absent, translated enum labels, stable unique IDs and no state longer than 255 characters.
 3. Both successful and failed coordinator refresh, restart, network timeout, XML parse failures, sensor availability and recovery.
 4. `recall_watch.get_notices` return schema, filtering, paging, `has_more`, offset/limit validation, and removal on unload.
 5. Real responses from the Swedish Food Agency RSS endpoint, validated manually against the original notice for extraction correctness and missing values.
-6. HACS/Marketplace install/upgrade/uninstall and checks by `hacs/action` and `hassfest` in GitHub Actions.
+6. Marketplace install/upgrade/uninstall and checks by `scripts/validate_marketplace.py` and `hassfest` in GitHub Actions.
 7. Recorder retention / attribute-size behavior with a busy 250-item feed and a changing latest notice.
 
 The isolated tests in this repository **do not replace** these checks. The code must remain a beta candidate until the actual runtime checks have passed.
