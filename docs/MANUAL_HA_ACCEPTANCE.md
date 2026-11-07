@@ -12,7 +12,7 @@
 ## Marketplace installation and setup
 
 1. Once the candidate is reviewed and published as a **GitHub pre-release**, open **Settings → Marketplace**, accept its security warning, choose **Add from link** and enter `https://github.com/JonasHedberg/recall-watch`. Connect GitHub if prompted.
-2. Enable pre-release selection on the repository and select the exact candidate version `v0.4.0b2`. Record the displayed version and any repair/restart request.
+2. Under **Settings → Devices & services → Marketplace**, enable the repository's disabled-by-default **Pre-release** entity and turn on its switch. Select the exact candidate version `v0.4.0b2` in Marketplace. Record the displayed version and any repair/restart request.
 3. Install and select Recall Watch under **Settings → Devices & services**.
 4. Add **all six** independently configured source entries. Confirm six sensor entities per entry, stable entity IDs, correct source names and original authority links.
 5. Observe fresh data after setup; verify that EU Safety Gate alerts are not described as guaranteed recalls. The publisher may return HTTP 500; this should produce unavailable entities/clear diagnostics, never a misleading empty safe state.
