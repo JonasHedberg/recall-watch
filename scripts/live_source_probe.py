@@ -39,6 +39,12 @@ def choose_review_samples(notices: tuple, *, limit: int = 12) -> list:
             add(notice)
             hazards.add(hazard)
     for notice in notices:
+        text = f"{notice.title} {notice.summary}".casefold()
+        if any(term in text for term in (
+            "notice withdrawn", "withdrawn notice", "notice corrected",
+            "correction notice", "amended notice", "superseded", "cancelled",
+        )):
+            add(notice)
         if notice.updated and notice.updated != notice.published:
             add(notice)
         if notice.details.batch_numbers or notice.details.best_before_dates:
@@ -88,7 +94,8 @@ async def check_source(session: aiohttp.ClientSession, source_id: str) -> dict:
             "status": "parsed",
             "record_count": len(notices),
             "audit_sample_count": len(samples),
-            "audit_sample_policy": "first/last, distinct hazards, updates, explicit batches (max 12)",
+            "sample_requires_independent_human_verification": True,
+            "audit_sample_policy": "first/last, hazards, corrected or withdrawn labels, updates, explicit batches (max 12)",
             "sample_notices_for_manual_review": [
                 {
                     "identifier": item.identifier[:100],
