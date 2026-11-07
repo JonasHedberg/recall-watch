@@ -25,7 +25,7 @@ python scripts/validate_repository.py
 python -m compileall -q custom_components/recall_watch
 ```
 
-On Windows, activate with `.venv\Scripts\activate`. Runtime validation also requires the real Home Assistant integration test environment, HACS Action and hassfest in GitHub Actions.
+On Windows, activate with `.venv\Scripts\activate`. Runtime validation also requires the real Home Assistant integration test environment, Marketplace repository validation and hassfest in GitHub Actions.
 
 ## Project conventions
 

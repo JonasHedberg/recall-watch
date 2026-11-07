@@ -17,6 +17,6 @@ All locale files should contain the same nested translation keys and enum identi
 4. Run `python -m pytest -q` and inspect the UI in a real Home Assistant installation using English and Swedish.
 5. Record any locale that has not been checked in the real UI before release.
 
-This is a custom HACS/Marketplace integration. If it later becomes an official Core integration, its internationalization flow will follow Home Assistant Core and Lokalise requirements instead.
+This is a community-maintained Marketplace integration. If it later becomes an official Core integration, its internationalization flow will follow Home Assistant Core and Lokalise requirements instead.
 
 Source notice content is **not** translated. Source menu labels are currently English for source identification; additional translated descriptions may be added with matching locale keys.

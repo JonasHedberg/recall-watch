@@ -1,6 +1,6 @@
-"""Offline structure checks for a public HACS/Marketplace source repository.
+"""Offline structure checks for a public Home Assistant Marketplace source repository.
 
-Does NOT prove that HACS/hassfest accept the repo or that HA runtime works.
+Does NOT prove that Marketplace install or Home Assistant runtime works.
 """
 
 from __future__ import annotations
@@ -49,7 +49,7 @@ def validate(require_owner: bool = False, root: Path = ROOT) -> list[str]:
         return errors
 
     manifest = json.loads((root / "custom_components/recall_watch/manifest.json").read_text())
-    hacs = json.loads((root / "hacs.json").read_text())
+    marketplace_metadata = json.loads((root / "hacs.json").read_text())
     if manifest.get("domain") != "recall_watch":
         errors.append("Invalid integration domain")
     for key in ("domain", "documentation", "issue_tracker", "codeowners", "name", "version"):
@@ -57,8 +57,8 @@ def validate(require_owner: bool = False, root: Path = ROOT) -> list[str]:
             errors.append(f"Manifest missing {key} (codeowners can be empty until configured)")
     if manifest.get("codeowners") == [] and not require_owner:
         errors = [x for x in errors if not x.startswith("Manifest missing codeowners")]
-    if hacs.get("name") != "Recall Watch":
-        errors.append("Invalid HACS name")
+    if marketplace_metadata.get("name") != "Recall Watch":
+        errors.append("Invalid Marketplace integration name")
     components = root / "custom_components"
     if len([p for p in components.iterdir() if p.is_dir()]) != 1:
         errors.append("Expected exactly one custom integration")
@@ -109,7 +109,7 @@ def main() -> int:
             print(f" - {error}")
         return 1
     print("Offline repository structure and documentation links validated.")
-    print("Not a substitute for HACS Action, hassfest, feed tests or a real HA runtime.")
+    print("Not a substitute for Marketplace installation, hassfest, feed tests or a real HA runtime.")
     return 0
 
 
