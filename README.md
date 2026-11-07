@@ -1,6 +1,6 @@
 # Recall Watch — International product recall monitoring for Home Assistant
 
-> **0.4.0b2 release candidate — NOT YET RELEASE APPROVED.** The existing published `v0.4.0b1` is an older, unverified beta. This proposed update has automated live-data checks and native Home Assistant tests, but the actual Marketplace/HACS installation, source-accuracy acceptance and maintainer approval still require evidence. This is a third-party Home Assistant integration, not an official Home Assistant Core integration, an official government service, or a substitute for checking authoritative safety notices. Do **not** publish a release until [every release gate](docs/RELEASE_ACCEPTANCE.md) is cleared.
+> **0.4.0b2 release candidate — NOT YET RELEASE APPROVED.** The existing published `v0.4.0b1` is an older, unverified beta. This proposed update has automated live-data checks and native Home Assistant tests, but the actual Marketplace installation, source-accuracy acceptance and maintainer approval still require evidence. This is a third-party Home Assistant integration, not an official Home Assistant Core integration, an official government service, or a substitute for checking authoritative safety notices. Do **not** publish a release until [every release gate](docs/RELEASE_ACCEPTANCE.md) is cleared.
 
 Recall Watch surfaces official recall notices as Home Assistant sensors and a response-only action. Choose one or more supported country-specific sources. Each configured source is independent, with its own keyword filter, coordinator and entity set. The integration never uploads keyword lists to a Recall Watch server; queries use only fixed government endpoints.
 
@@ -38,16 +38,16 @@ Official-source references and exact fixed URLs are documented in [DATA_SOURCES.
 The project source is available at [JonasHedberg/recall-watch](https://github.com/JonasHedberg/recall-watch). The current `0.4.0b2` development branch is an **unapproved release candidate**; the previously published `v0.4.0b1` is older and has not satisfied the full acceptance process. Review these limitations before testing:
 
 1. Make a backup of your Home Assistant configuration.
-2. On Home Assistant 2026.10 or earlier, in HACS add `JonasHedberg/recall-watch` as a **Custom repository → Integration**, once a tested HACS release is available. On Home Assistant 2026.11+, use the built-in **Marketplace** with its custom repository option.
-3. Download/install the integration and restart Home Assistant.
-4. Select **Settings → Devices & services → Add integration → Recall Watch**. Select **one** official source and optionally supply up to 20 comma-separated search phrases (maximum 64 characters each).
-5. Repeat step 4 to monitor additional countries or categories. There can be only one configuration entry per source, but multiple sources can be configured.
+2. In **Home Assistant 2026.11 or later**, go to **Settings → Marketplace → Add from link**. Connect your GitHub account if requested, then enter `https://github.com/JonasHedberg/recall-watch`.
+3. Select the repository and install an **approved, published** version. The current beta candidate has not yet been released; do not install it as if it were a verified release.
+4. Follow the configuration flow under **Settings → Devices & services → Add integration → Recall Watch**. Select an official source and optionally supply up to 20 comma-separated search phrases (maximum 64 characters each).
+5. Repeat configuration to monitor more countries or categories. Only one configuration entry per source is supported.
 
-For a test installation without HACS, copy the folder `custom_components/recall_watch/` into your HA configuration's `custom_components/` folder and restart. The root repository ZIP is not a single-click installer.
+For developer testing before a release, check out the exact candidate SHA, copy `custom_components/recall_watch/` into the Home Assistant configuration folder, and restart. This manual fallback is **not** a Marketplace install or an acceptance sign-off.
 
-Previously installed Swedish v0.2 entries are migrated to the `se_food` source; the sensor's entry-based unique IDs are retained. **Make a backup before upgrading and verify historical entities after restart.**
+Previously installed Swedish v0.2 entries are migrated to `se_food`; entity-based unique IDs are retained. **Back up before upgrading, and verify historical entities after restart.**
 
-See [HACS and Marketplace installation](docs/HACS_MARKETPLACE.md) and [GitHub setup](docs/GITHUB_SETUP.md).
+See [Marketplace installation](docs/MARKETPLACE_INSTALLATION.md) and [GitHub setup](docs/GITHUB_SETUP.md).
 
 ## Sensors and example data
 

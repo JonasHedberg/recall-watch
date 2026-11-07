@@ -1,63 +1,47 @@
-# Real Home Assistant acceptance runbook (English + Swedish)
+# Real Home Assistant Marketplace acceptance (English + Swedish)
 
-**Status: not executed against the maintainer's real Home Assistant environment.**
-This guide is intended for a human reviewer with an actual supported Home Assistant instance. GitHub Actions already executes native Home Assistant tests with synthetic source responses; those do not test HACS/Marketplace installation or real frontend rendering.
+**Status: requires human execution in a genuine Home Assistant environment.** Automated Home Assistant 2026.11 tests exercise the runtime with synthetic notices; they do not verify actual frontend display or Marketplace installation.
 
-## Prerequisites
+## Requirements
 
-- Dedicated Home Assistant test VM / installation (not an unbacked-up production household).
-- Supported Home Assistant 2026.10.x or newer, network access to the six publisher endpoints and access to logs.
-- A fresh backup of the test configuration and a copy of the currently installed Recall Watch state, if upgrading.
-- The **exact** reviewed PR commit SHA. Do not test an older public tag and label it as this candidate.
+- Dedicated test Home Assistant **2026.11.0 or later** with Marketplace available under *Settings → Marketplace*.
+- GitHub connection for adding a custom repository from a link, real Internet access to every supported authority, and access to application logs.
+- A backup of the test configuration and any existing Recall Watch installation.
+- The exact reviewed candidate commit and a **published pre-release** to test installation and update paths. Never claim a prior published tag contains unreleased code.
 
-## Install candidate from source
+## Marketplace installation and setup
 
-1. Record the full PR commit SHA from [PR #12](https://github.com/JonasHedberg/recall-watch/pull/12).
-2. Check out that SHA in a clean local repository.
-3. Copy `custom_components/recall_watch` to `<HA_CONFIG>/custom_components/recall_watch` (not the repository root ZIP). Restart Home Assistant.
-4. Inspect Home Assistant logs. Loading as a custom integration generates a normal custom-integrations warning, but should have no Recall Watch setup exceptions.
-5. For later HACS/Marketplace testing, install the same code through the actual supported repository UI, once a *correctly flagged* testing prerelease exists.
+1. Once the candidate is reviewed and published as a **GitHub pre-release**, open **Settings → Marketplace**, accept its security warning, choose **Add from link** and enter `https://github.com/JonasHedberg/recall-watch`. Connect GitHub if prompted.
+2. Enable pre-release selection on the repository and select the exact candidate version `v0.4.0b2`. Record the displayed version and any repair/restart request.
+3. Install and select Recall Watch under **Settings → Devices & services**.
+4. Add **all six** independently configured source entries. Confirm six sensor entities per entry, stable entity IDs, correct source names and original authority links.
+5. Observe fresh data after setup; verify that EU Safety Gate alerts are not described as guaranteed recalls. The publisher may return HTTP 500; this should produce unavailable entities/clear diagnostics, never a misleading empty safe state.
 
-## UI / localization verification
+## English and Swedish language acceptance
 
-Repeat the following in **English** and **Swedish**:
+Repeat using a user with language **English** and **Svenska**:
 
-- Open *Settings → Devices & services → Add integration → Recall Watch*.
-- Confirm configuration title, source selector, keyword field, descriptions and validation errors are readable; no untranslated keys or malformed characters.
-- Select each source separately, and check all six sensors created for the source. Expected keys include matching count, product, brand, risk type, batch, best-before date.
-- Confirm risk type translation for `allergen`, `chemical`, `foreign_object`, `microbiological`, `fire`, `burn`, `choking`, `fall`, `multiple`; unknown must display as *unknown*, not `safe`.
-- Confirm unknown values, source attribution, original publisher links and mobile views are readable.
-- Add a keyword such as `Coop`, verify the count is filtered, then change options and check reload/updated count. Repeat with an invalid keyword list and verify it is rejected.
+- Check configuration titles, source dropdown, keyword validation errors, options flow, translated sensor names, unknown values and readable mobile screens.
+- Verify risk translations for `allergen`, `chemical`, `foreign_object`, `fire`, `burn`, `fall`, `entrapment`, `flammability` and `multiple`.
+- Confirm that an English-language source does not receive invented Swedish translations of publisher notice content.
 
-## Multi-source and lifecycle verification
+## Data, reliability and migration
 
-- Configure all six sources. Check that all 36 expected entities are registered with stable unique IDs and data never leaks between sources.
-- Run `recall_watch.get_notices` for each source with `matching_only` true and false, and compare resulting source IDs, pagination limits (0–500) and original links.
-- With multiple sources configured, omit `source` from the action and verify it fails with a clear message.
-- Record each source's count and sample notices, and manually compare to the publisher URLs. Include an EU Safety Gate alert and distinguish alerts from recalls.
-- Disconnect networking or block outbound requests. Trigger a coordinator refresh and verify sensors become *unavailable*, old data is not falsely replaced with zero and recovery is automatic when networking returns.
-- Restart Home Assistant. Inspect that configured options, unique IDs, entity names and correct sources survive.
-- Restore a backup containing the previous Swedish v0.2 integration; verify migration to `se_food` while maintaining existing entity registry IDs and recordings.
-- Unload and delete one entry, confirm the other configured sources and `get_notices` action still work; then uninstall custom integration and check no unexpected persistent registrations.
+- Run `recall_watch.get_notices` for every source, compare source IDs, order, pagination and links. Without `source`, the action must reject ambiguous multi-source requests.
+- Update keywords and verify the count changes without affecting other source entries.
+- Interrupt network access, trigger refresh, verify sensors become unavailable and preserve cached last-successful results without incorrectly reporting zero notices; restore network and verify recovery.
+- Restart and verify all sources and entity registry IDs.
+- Upgrade an existing beta in an isolated copy of Home Assistant; restore a backup of the legacy Swedish v0.2 config and verify migration, history and source selection.
+- Test **Marketplace uninstall, reinstall, version rollback and update** in the test system.
 
-## HACS/Marketplace installation, update and rollback
+## Evidence and release decision
 
-HACS validation alone is not a substitute for actual installation:
+Capture Home Assistant version, git commit and release tag, English/Swedish screenshots, redacted logs, version selection, update/uninstall results and sample publisher article comparisons. Provide HTTPS links to immutable, sanitized evidence in `docs/release-evidence.json`; do not upload personal Home Assistant configuration.
 
-1. When a reviewed prerelease is ready, add the custom repository `JonasHedberg/recall-watch` as an Integration in HACS/Marketplace.
-2. Install from that exact prerelease, restart, verify configuration. Record displayed version and status.
-3. Upgrade from the old beta on a backup/sandbox; verify source migration, options and entities.
-4. Roll back to the backed-up version, repeat setup/unload, and document whether recovery restores all entity IDs.
-5. Uninstall and reinstall cleanly. Verify the six source adapters again.
-
-## Acceptance evidence
-
-Record HA version, Python version, tested commit, English and Swedish screenshots, service response and logs (after removing private data), plus direct links to publisher notices. Store the evidence outside the repository if it contains sensitive information; provide only sanitized URLs in the acceptance file.
-
-The human maintainer must independently verify publisher reuse requirements, the notice matching accuracy, and all required checks, then update `docs/release-evidence.json` and run:
+The human maintainer must also review actual publisher terms, rate limits and original-notice accuracy across every source. Finally run:
 
 ```sh
 python scripts/verify_release_evidence.py
 ```
 
-Do not publish from a GitHub green check alone.
+A successful test in Python alone does not constitute a signed user-installation review.
