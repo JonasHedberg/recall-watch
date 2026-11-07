@@ -61,3 +61,12 @@ def test_no_evidence_file_is_an_error() -> None:
         text=True, capture_output=True, check=False)
     assert result.returncode != 0
     assert "BLOCKED" in result.stdout
+
+
+def test_only_marketplace_installation_is_an_acceptance_requirement() -> None:
+    assert "marketplace_install_upgrade_rollback_and_uninstall" in REQUIRED_CHECKS
+    assert not any("hacs" in check.casefold() for check in REQUIRED_CHECKS)
+    data = evidence()
+    data["checks"].pop("marketplace_install_upgrade_rollback_and_uninstall")
+    data["checks"]["hacs_install_upgrade_and_uninstall"] = True
+    assert any("marketplace_install_upgrade_rollback_and_uninstall" in issue for issue in verify(data))
