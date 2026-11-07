@@ -47,7 +47,7 @@ The bundled pure-Python client has no Home Assistant imports; the custom integra
 
 ## Required Home Assistant end-to-end checks
 
-In a **real supported Home Assistant runtime**, install `custom_components/recall_watch`, and test:
+In a **real supported Home Assistant runtime**, install Recall Watch through **Settings → Marketplace**, and test:
 
 1. Clean setup, language switching (English/Swedish), invalid keywords, duplicate entry prevention, options edit and reload.
 2. Count plus five latest-field sensors, `unknown` when fields absent, translated enum labels, stable unique IDs and no state longer than 255 characters.
