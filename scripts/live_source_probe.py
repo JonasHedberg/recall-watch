@@ -49,6 +49,16 @@ def choose_review_samples(notices: tuple, *, limit: int = 12) -> list:
             add(notice)
         if notice.details.batch_numbers or notice.details.best_before_dates:
             add(notice)
+    # Complete the sample with evenly spaced records to avoid examining only
+    # the latest notices when a feed has many similarly classified entries.
+    if notices and limit > 0:
+        for pos in range(limit):
+            index = pos * (len(notices) - 1) // max(1, limit - 1)
+            add(notices[index])
+        for notice in notices:
+            if len(selected) >= limit:
+                break
+            add(notice)
     return selected[:limit]
 
 
