@@ -1,54 +1,49 @@
-# Quality assurance report — Release-readiness candidate (2026-10-31)
+# Quality assurance report — Marketplace-only v0.4.0b2 candidate
 
-**Candidate source:** `release-readiness-2026-10-31` / [draft PR #12](https://github.com/JonasHedberg/recall-watch/pull/12). **NOT RELEASE-APPROVED.** Existing published `v0.4.0b1` is an earlier unapproved beta; this PR does not change that tag.
+**Reviewed:** 7 November 2026. **Status: code/automated verification passed; public release acceptance NOT YET complete.** Proposed source is [draft PR #16](https://github.com/JonasHedberg/recall-watch/pull/16), not the older published `v0.4.0b1`.
 
-## Verified in GitHub Actions
+## Latest full CI
 
-| Verification | Recorded result | Limits |
+Evidence: [GitHub Actions run 42362105080](https://github.com/JonasHedberg/recall-watch/actions/runs/42362105080).
+
+| Check | Result | What the result proves |
 |---|---|---|
-| Offline automated tests on Python 3.13 | **95 passed** | Synthetic fixtures and mocked component lifecycle, not a full HA installation |
-| Offline automated tests on Python 3.14 | **95 passed** | Same scope as above |
-| Real Home Assistant 2026.11.0 test API smoke | **6 passed** | Real framework, synthetic source responses; includes source isolation, configuration/options, coordinator outage recovery, migration and translations |
-| Marketplace repository validator | Validated in CI | Repository structure and metadata, not actual GUI installation |
-| Home Assistant hassfest | Passed | Static metadata and schema validation |
-| Six live authority probes | **6/6 sources parsed** | Successful bounded HTTP reads and parsing, not accuracy/completeness certification |
-| Strict response-size bounds | 2 MiB per network response | Hard limit, not a completeness guarantee |
-| Release acceptance evidence | **BLOCKED** | A dated human acceptance record has not been supplied |
+| Offline tests on Python 3.13 | **98 passed** | Isolated parsers, packaging, metadata and mocked contracts |
+| Offline tests on Python 3.14 | **98 passed** | The same regression suite on the HA runtime Python |
+| Home Assistant **2026.11.0** native tests | **6 passed** | Real Home Assistant APIs with synthetic authority responses |
+| Marketplace repository validation | **Passed** | Metadata, branding, source structure, relative links and HA version contract |
+| Home Assistant hassfest | **Passed** | Static integration metadata checks |
+| Live publisher probes | **6 of 6 parsed** | Actual bounded HTTP reads and parsable data; not exhaustive coverage |
 
-Reference: [GitHub Actions run 41194589214](https://github.com/JonasHedberg/recall-watch/actions/runs/41194589214), 31 October 2026; all six checks passed. Rerun the checks on the exact final accepted commit after further edits.
+### Live source sample (7 November 2026)
 
-## Live source sample (2026-10-31)
+| Source | Notices parsed |
+|---|---:|
+| European Commission Safety Gate | 130 |
+| Swedish Food Agency | 1 |
+| Canada food | 3 |
+| Canada consumer | 3 |
+| UK OPSS | 50 |
+| US CPSC | 192 |
 
-| Source | Parsed notices | Example metadata checked by parser |
-|---|---:|---|
-| EU Safety Gate | 157 | Report/alert ID, alert URL, product, risk and report date |
-| Swedish Food Agency | 2 | Recall headline, source link, product and risk |
-| Canadian food | 3 | Food/allergen headline, product and publisher ID |
-| Canadian consumer | 3 | Consumer product headline and hazard terms |
-| United Kingdom | 50 | GOV.UK Atom publication date, title and product |
-| US CPSC | 191 | Recall/update dates, structured product and original link |
+The earlier 7 November probe failed when Safety Gate returned HTTP 500. A subsequent run on the **same source code** succeeded. The intermittent upstream failure is not proof of a parser defect and is not silently converted into zero recalls. Coverage may change between polls and data sources may be unavailable; an empty result never establishes safety.
 
-All source counts reflect a *limited current response*, never all active notices or all markets. Sources can be incomplete; an empty result is never proof of a product's safety. Live probes retain two bounded example records per source in the CI artifact for manual comparison.
+## Improvements in this candidate
 
-## Changes reviewed
+- Required minimum Home Assistant **2026.11.0**; uses the built-in Marketplace distribution and the first-party Home Assistant test harness.
+- Kept the mandatory Marketplace metadata filename `hacs.json` (the platform requires it); removed obsolete installation paths, validation actions and publication guides.
+- Explicit risk parsing for Canadian **flammability** and **fall/entrapment**, with English and Swedish enum labels.
+- Existing corrections to complete bounded HTTP reads, redirect restrictions, EU action source selection and pagination, US CPSC update sorting, options and source separation remain tested.
+- Added strict evidence-version consistency for `v0.4.0b2`.
 
-- Corrected `aiohttp` stream reading to EOF with 2 MiB cap and tests for split reads.
-- EU selector source registry parity and pagination up to 500.
-- US CPSC last-update ordering with original recall date retained.
-- Conservative Swedish/English headlines and allergen/hazard recognition; unknown brands remain unknown.
-- English and Swedish JSON locale keys present and parity-checked.
-- Fail-closed evidence checker and source licence/attribution research.
+## Remaining release acceptance
 
-## NOT verified / mandatory before public release
+- [ ] A maintainer performs an actual **Marketplace install, upgrade, rollback and uninstall** on Home Assistant 2026.11+, and visually checks the English and Swedish interface.
+- [ ] Complete representative original-notice comparisons for all six sources, including corrected/withdrawn notices and EU full alert details (ten earlier independent spot checks are a start, not representative acceptance).
+- [ ] Human review of publisher-specific reuse terms, attribution and request frequency, with dated linked evidence.
+- [ ] `docs/release-evidence.json` is populated with genuine evidence and passes `python scripts/verify_release_evidence.py`.
+- [ ] The repository owner replaces the obsolete required branch status check with **Marketplace repository validation** in the protected `main` rule. The GitHub app connection used for this work has no administration permission to change it.
+- [ ] Correct the previously published `v0.4.0b1` beta release classification in the GitHub Releases interface.
+- [ ] Reverify CI at the exact accepted final commit, merge, create **v0.4.0b2** as a prerelease and test installation of that published artifact.
 
-- [ ] Real Home Assistant installation on maintainer hardware/VM: browser/UI, recorder behavior, restart and actual Marketplace installation (native automated tests cover only the simulated runtime environment).
-- [ ] Manual English and Swedish actual frontend UI review, plus Marketplace install, upgrade, backup and uninstall.
-- [ ] Representative human-labeled notices from **all six sources** compared to original authority product/brand, date, batch, hazard, case ID and jurisdiction, including withdrawn/corrected notices.
-- [ ] Publisher-specific reuse, attribution and rate-limit review signed by a human maintainer.
-- [ ] Human review of accepted version and release notes, including correct prerelease classification of `v0.4.0b1`.
-- [ ] `docs/release-evidence.json` with dated evidence links and all gates completed, passing `python scripts/verify_release_evidence.py`.
-- [ ] Review final exact revision CI after PR changes and verify published release via clean installation.
-
-No client-wide statement coverage was measured for this exact PR; earlier coverage figures from `2026-10-24` must not be cited for the new code.
-
-See [Release acceptance](RELEASE_ACCEPTANCE.md), [manual HA acceptance](MANUAL_HA_ACCEPTANCE.md), [independent authority sample audit](AUTHORITY_SAMPLE_AUDIT.md), [live acceptance matrix](LIVE_TEST_MATRIX.md), [source reuse research](SOURCE_REUSE_REVIEW.md), and [issue #1](https://github.com/JonasHedberg/recall-watch/issues/1).
+This is a third-party Marketplace integration, **not** an official Home Assistant Core integration or an official publisher safety service.
